@@ -7,6 +7,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class MensergerjenietApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(MensergerjenietApplication.class, args);
+	System.out.println("test");	SpringApplication.run(MensergerjenietApplication.class, args);
 	}
 }
