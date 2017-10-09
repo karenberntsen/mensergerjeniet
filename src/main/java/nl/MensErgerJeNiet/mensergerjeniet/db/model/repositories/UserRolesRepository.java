@@ -9,5 +9,4 @@ import nl.MensErgerJeNiet.mensergerjeniet.db.model.UserRole;
 @Repository
 public interface UserRolesRepository extends CrudRepository<UserRole, Long> {
 	
-	
 }

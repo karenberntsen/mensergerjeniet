@@ -1,8 +1,6 @@
 package nl.MensErgerJeNiet.mensergerjeniet.db.model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
