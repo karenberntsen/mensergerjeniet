@@ -17,6 +17,7 @@ public class MensErgerJeNiet {
 	private int dice;
 	private boolean hasThrown;
 	private boolean gameStarted;
+	private boolean isFinished;
 
 	/**
 	 * Constructor. Het aantal computerspelers en het aantal menselijke spelers is
@@ -105,10 +106,10 @@ public class MensErgerJeNiet {
 	}
 
 	private void nextTurn() {
+		isFinished = getCurrentPlayer().isWinner();
 		hasThrown = false;
 		if(dice != 6) {
 			nextPlayer();
 		}
 	}
-
-}
+ }

@@ -11,6 +11,7 @@
 <title>Hello World!</title>
 </head>
 <body class="security-app">
+  <%@ include file="../html-part/navbar.html" %>
 	<div class="details">
 
 		<h2>Spring Security - JDBC Authentication</h2>
