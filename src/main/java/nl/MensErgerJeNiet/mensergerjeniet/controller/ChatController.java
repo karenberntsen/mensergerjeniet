@@ -1,12 +1,9 @@
 package nl.MensErgerJeNiet.mensergerjeniet.controller;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -26,66 +23,11 @@ import nl.MensErgerJeNiet.mensergerjeniet.config.security.CustomUserDetails;
  */
 @Controller
 public class ChatController {
-	private ArrayList<Bot> chatBots = new ArrayList<Bot>();
-
-	public ChatController() {
-		chatBots.add(new Bot() {
-			@Override
-			public ChatMessage reply(ChatMessage message) {
-
-				ChatMessage chatMessage = new ChatMessage();
-				chatMessage.setType(ChatMessage.MessageType.CHAT);
-				chatMessage.setSender("bot");
-				if (message.getContent().startsWith("!time"))
-					return time(chatMessage);
-				else if(message.getContent().startsWith("!random"))
-					return random(message, chatMessage);
-				return null;
-			}
-
-			private ChatMessage random(ChatMessage message, ChatMessage chatMessage) {
-				chatMessage.setContent("Vul een max nummer in vb(!random 5)");
-				try {
-					int i = Integer.parseInt(message.getContent().split("!random")[1].trim());
-					chatMessage.setContent("" + (int) (Math.random() * i));
-				} catch (NumberFormatException e) {}
-				return chatMessage;
-			}
-
-			private ChatMessage time(ChatMessage chatMessage) {
-				chatMessage.setContent("Time is: " + LocalDateTime.now());
-				return chatMessage;
-			}
-		});
-
-		chatBots.add(new Bot() {
-			@Override
-			public ChatMessage reply(ChatMessage message) {
-				if (message.getSender().equals("parrot"))
-					return null;
-				ChatMessage chatMessage = new ChatMessage();
-				chatMessage.setType(ChatMessage.MessageType.CHAT);
-				chatMessage.setSender("parrot");
-				chatMessage.setContent(message.getContent());
-				return chatMessage;
-			}
-		});
-	}
 
 	public void botReplys(ChatMessage message) {
-		for (Bot b : chatBots) {
-			ChatMessage reply = b.reply(message);
-			if (reply != null) {
-				new Thread(() -> {
-					try {
-						Thread.sleep(50);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-					messagingTemplate.convertAndSend("/channel/public", reply);
-				}).start();;
-				break;
-			}
+		if(!message.getType().equals(ChatMessage.MessageType.GAME)) return;
+		if(message.getContent().equals("throw")) {
+			message.setContent(""+(int)(Math.random()*6+1));
 		}
 	}
 

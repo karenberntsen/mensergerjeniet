@@ -34,13 +34,13 @@ var app = angular.module('myApp', [])
   });
 </script>
 
-<!-- <script><
+ <script>
     function myFunction() {
-		var rand =
-		document.getElementById("dice").src = "../twee.png";
+		var rand = Math.floor((Math.random() * 6) + 1);
+		document.getElementById("dice").href.baseVal = "img/"+rand+".png";
     }
->
-</script>-->
+
+</script>
 
 <svg style=width:100vmin;height:100vmin;position:fixed;top:0;left:0;bottom:0;right:0; ng-controller="myCtrl" xmlns="http://www.w3.org/2000/svg">
 		<circle ng-repeat="indices in whiteCircles" ng-attr-cx="{{circleCoordinates[indices.x]}}%" ng-attr-cy="{{circleCoordinates[indices.y]}}%" ng-attr-r="{{circleRadius}}%" stroke="black" stroke-width="1" fill="white" />
@@ -48,7 +48,7 @@ var app = angular.module('myApp', [])
 		<circle ng-repeat="indices in greenCircles" ng-attr-cx="{{circleCoordinates[indices.x]}}%" ng-attr-cy="{{circleCoordinates[indices.y]}}%" ng-attr-r="{{circleRadius}}%" stroke="black" stroke-width="1" fill="green" />
 		<circle ng-repeat="indices in yellowCircles" ng-attr-cx="{{circleCoordinates[indices.x]}}%" ng-attr-cy="{{circleCoordinates[indices.y]}}%" ng-attr-r="{{circleRadius}}%" stroke="black" stroke-width="1" fill="yellow" />
 		<circle ng-repeat="indices in redCircles" ng-attr-cx="{{circleCoordinates[indices.x]}}%" ng-attr-cy="{{circleCoordinates[indices.y]}}%" ng-attr-r="{{circleRadius}}%" stroke="black" stroke-width="1" fill="red" />		
-	    <image id="dice" onclick="alert('I am an alert box!')" xlink:href="../"+dobbel+".png" ng-attr-x="{{circleCoordinates[5]-circleRadius}}%" ng-attr-y="{{circleCoordinates[5]-circleRadius}}%" height="{{2*circleRadius}}%" width="{{2*circleRadius}}%"/>
+	    <image id="dice" onclick="myFunction()" xlink:href="img/1.png" ng-attr-x="{{circleCoordinates[5]-circleRadius}}%" ng-attr-y="{{circleCoordinates[5]-circleRadius}}%" height="{{2*circleRadius}}%" width="{{2*circleRadius}}%"/>
 
 </svg>
 </body>
