@@ -1,5 +1,4 @@
 'use strict';
-
 var messageForm = document.querySelector('#messageForm');
 var messageInput = document.querySelector('#message');
 var messageArea = document.querySelector('#messageArea');
@@ -12,14 +11,11 @@ var colors = [
     '#ffc107', '#ff85af', '#FF9800', '#39bbb0'
 ];
 
-function conn(user) {
-	username = user;
-    if(username) {
+function conn() {
         var socket = new SockJS('/ws');
         stompClient = Stomp.over(socket);
 
         stompClient.connect({}, onConnected, onError);
-    }
 }
 
 function onConnected() {
@@ -29,7 +25,7 @@ function onConnected() {
     // Tell your username to the server
     stompClient.send("/app/chat.addUser",
         {},
-        JSON.stringify({sender: username, type: 'JOIN'})
+        JSON.stringify({sender: null, type: 'JOIN'})
     )
 
     connectingElement.classList.add('hidden');
@@ -47,13 +43,24 @@ function sendMessage(event) {
 
     if(messageContent && stompClient) {
         var chatMessage = {
-            sender: username,
             content: messageInput.value,
             type: 'CHAT'
         };
 
         stompClient.send("/app/chat.sendMessage", {}, JSON.stringify(chatMessage));
         messageInput.value = '';
+    }
+    event.preventDefault();
+}
+
+function throwDice() {
+    if(stompClient) {
+        var chatMessage = {
+            content: 'throw',
+            type: 'GAME'
+        };
+
+        stompClient.send("/app/chat.sendMessage", {}, JSON.stringify(chatMessage));
     }
     event.preventDefault();
 }
@@ -70,6 +77,13 @@ function onMessageReceived(payload) {
     } else if (message.type === 'LEAVE') {
         messageElement.classList.add('event-message');
         message.content = message.sender + ' left!';
+    }else if (message.type === 'GAME') {
+        messageElement.classList.add('event-message');
+        
+        var data = JSON.parse(message.content);
+        document.getElementById("dice").href.baseVal = "img/"+data.dice+".png";
+        //data.dice , data.options
+        //TODO game stuff
     } else {
         messageElement.classList.add('chat-message');
 
@@ -107,4 +121,4 @@ function getAvatarColor(messageSender) {
     return colors[index];
 }
 
-messageForm.addEventListener('submit', sendMessage, true)
+//messageForm.addEventListener('submit', sendMessage, true)

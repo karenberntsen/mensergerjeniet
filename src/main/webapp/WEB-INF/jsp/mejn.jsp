@@ -32,7 +32,6 @@ var app = angular.module('myApp', [])
   
   
   });
-  conn();
 </script>
 
 <svg style=width:100vmin;height:100vmin;position:fixed;top:0;left:0;bottom:0;right:0; ng-controller="myCtrl" xmlns="http://www.w3.org/2000/svg">
@@ -44,10 +43,34 @@ var app = angular.module('myApp', [])
 	    <image id="dice" onclick="throwDice()" xlink:href="img/1.png" ng-attr-x="{{circleCoordinates[5]-circleRadius}}%" ng-attr-y="{{circleCoordinates[5]-circleRadius}}%" height="{{2*circleRadius}}%" width="{{2*circleRadius}}%"/>
 
 </svg>
+<div id="chat-page">
+        <div class="chat-container">
+            <div class="chat-header">
+                <h2>Spring WebSocket Chat Demo</h2>
+            </div>
+            <div class="connecting">
+                Connecting...
+            </div>
+            <ul id="messageArea">
 
+            </ul>
+            <form id="messageForm" name="messageForm" nameForm="messageForm">
+                <div class="form-group">
+                    <div class="input-group clearfix">
+                        <input type="text" id="message" placeholder="Type a message..." autocomplete="off" class="form-control"/>
+                        <button type="submit" class="primary">Send</button>
+                        
+						<button onclick="throwDice()">trow dice</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <script src="/js/sockjs.min.js"></script>
     <script src="/js/stomp.min.js"></script>
     <script src="/js/main.js"></script>
+    <script>
+    conn();</script>
 </body>
 </html>

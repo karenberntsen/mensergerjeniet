@@ -1,6 +1,5 @@
 package nl.MensErgerJeNiet.mensergerjeniet.controller;
 
-
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +16,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import nl.MensErgerJeNiet.mensergerjeniet.config.security.CustomUserDetails;
+import nl.MensErgerJeNiet.mensergerjeniet.game.model.MensErgerJeNiet;
 
 /**
  * Created by rajeevkumarsingh on 24/07/17.
@@ -24,11 +24,43 @@ import nl.MensErgerJeNiet.mensergerjeniet.config.security.CustomUserDetails;
 @Controller
 public class ChatController {
 
+	private MensErgerJeNiet mejn = new MensErgerJeNiet();
+
 	public void botReplys(ChatMessage message) {
-		if(!message.getType().equals(ChatMessage.MessageType.GAME)) return;
-		if(message.getContent().equals("throw")) {
-			message.setContent(""+(int)(Math.random()*6+1));
+		if (!message.getType().equals(ChatMessage.MessageType.GAME))
+			return;
+
+		if (SecurityContextHolder.getContext().getAuthentication().getName()
+				.equals(mejn.getCurrentPlayer().getName())) {
+			if (message.getContent().equals("throw")) {
+				int dice = mejn.throwDice();
+				int[] options = mejn.getPlayOptions();
+				message.setContent(getContentString(dice,options));
+				
+			} else if (message.getContent().startsWith("pion")) {
+				mejn.doOption(Integer.parseInt(message.getContent().split("pion")[1].trim()));
+			} else if (message.getContent().equals("start")) {
+				mejn.startGame();
+			}
 		}
+	}
+
+	private String getContentString(int dice, int[] options) {
+		StringBuilder builder = new StringBuilder();
+		builder.append("{ \"dice\":").append(dice).append(" , \"options\": [");
+		for(int i = 0; i < options.length; ++i) {
+			builder.append(options[i]);
+			if(i < options.length-1) {
+				builder.append(",");
+			}
+		}
+		builder.append("]}");
+		return builder.toString();
+	}
+
+	private String getOptionsString(int[] options) {
+		
+		return null;
 	}
 
 	@MessageMapping("/chat.sendMessage")
@@ -41,6 +73,8 @@ public class ChatController {
 	@MessageMapping("/chat.addUser")
 	@SendTo("/channel/public")
 	public ChatMessage addUser(@Payload ChatMessage chatMessage, SimpMessageHeaderAccessor headerAccessor) {
+		chatMessage.setSender(SecurityContextHolder.getContext().getAuthentication().getName());
+		mejn.addUser(chatMessage.getSender());
 		return chatMessage;
 	}
 

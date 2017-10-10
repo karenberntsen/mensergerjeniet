@@ -9,12 +9,8 @@ import java.util.TreeMap;
 public class GameBoard {
 
 	private TreeMap<Integer,Pawn> gameBoard= new TreeMap<Integer,Pawn>();
-	private HashMap<Pawn,Integer> pawnLocations;
+	private HashMap<Pawn,Integer> pawnLocations=new HashMap<Pawn,Integer>();
 	private static final int boardLength = 40;
-
-	public GameBoard(int players) {
-		this.pawnLocations= new HashMap<Pawn,Integer>(4*players);
-	}
 
 	/**
 	 * Deze functie print de status van het 'bord'. Per regel representeert het eerste nummer het nummer van het vakje waarop een pion staat, gevolgd door het spelernummer en het pionnummer. Deze regels worden geprint op volgorde van de vakjes. Pionnen die in het hok of huis staan worden niet door deze functie geprint.

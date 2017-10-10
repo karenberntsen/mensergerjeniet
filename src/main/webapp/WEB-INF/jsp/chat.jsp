@@ -32,14 +32,15 @@
                     <div class="input-group clearfix">
                         <input type="text" id="message" placeholder="Type a message..." autocomplete="off" class="form-control"/>
                         <button type="submit" class="primary">Send</button>
+                        
+						<button onclick="throwDice()">trow dice</button>
                     </div>
                 </div>
             </form>
         </div>
     </div>
-
     <script src="/js/sockjs.min.js"></script>
     <script src="/js/stomp.min.js"></script>
     <script src="/js/main.js"></script>
-	<script>conn('${username}');</script>
+	<script>conn();</script>
 </html>

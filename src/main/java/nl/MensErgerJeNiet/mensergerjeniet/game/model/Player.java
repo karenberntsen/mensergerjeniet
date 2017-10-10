@@ -29,11 +29,32 @@ public abstract class Player {
 		home.addAll(pawns);
 		System.out.println(name + " is aangemaakt");
 	}
+	public String getName() {
+		return name;
+	}
+	
+	public Pawn getPawn(int index) {
+		for (Pawn p:pawns) {
+			if (p.getPawnNumber()==index) {
+				return p;
+			}
+		}
+		return null; //Make this more beautiful
+	}
+	
+	public Pawn getOptionPawn(int index, int dice) {
+		for (Pawn p:getPlayOptions(dice)) {
+			if (p.getPawnNumber()==index) {
+				return p;
+			}
+		}
+		return null; //Make this more beautiful
+	}
 
 	/**
 	 * Deze functie kiest uit de gegeven opties een pion om te verplaatsen.
  	 */
-	public abstract Pawn chooseOption(ArrayList<Pawn> playOptions);
+//	public abstract Pawn chooseOption(ArrayList<Pawn> playOptions);
 
 	public int indexOfHome(Pawn pawn) {
 		return home.indexOf(pawn);
@@ -102,17 +123,17 @@ public abstract class Player {
 	/**
 	 * Deze functie representeert de beurt van de speler na het gooien van de dobbelsteen. De opties worden verzameld en vervolgens wordt daaruit gekozen. Als de speler iets verplaatst heeft wordt er een 'TRUE' teruggegeven, en als de speler niets verplaatst heeft een 'FALSE'.
  	 */
-	public boolean doTurn(int dice) {
-		ArrayList<Pawn> playOptions=getPlayOptions(dice);
-		if (playOptions.size()==0) {
-			return false;
-		} else {
-			Pawn pawn = chooseOption(playOptions);
-			movePawn(pawn,dice);
-			return true;
-		}
-
-	}
+//	public boolean doTurn(int dice) {
+//		ArrayList<Pawn> playOptions=getPlayOptions(dice);
+//		if (playOptions.size()==0) {
+//			return false;
+//		} else {
+//			Pawn pawn = chooseOption(playOptions);
+//			movePawn(pawn,dice);
+//			return true;
+//		}
+//
+//	}
 
 	/**
 	 * Deze functie zet een pion van deze speler in het hok van deze speler.
@@ -126,7 +147,7 @@ public abstract class Player {
 	/**
 	 * Deze functie verplaatst een pion het aantal vakjes van de dobbelsteen (dice) en print wat hij doet. Aangezien de 'doTurn' alleen pionnen meegeeft die gezet kunnen worden, hoeft dat hier niet opnieuw gecheckt te worden.
  	 */
-	private void movePawn(Pawn pawn, int dice)  {
+	public void movePawn(Pawn pawn, int dice)  {
 		switch (pawn.getLocation()) {
 			case HOME:
 				System.out.println(this.toString() + " zet een nieuwe pion op het bord");
@@ -172,7 +193,7 @@ public abstract class Player {
 	/**
 	 * Deze functie kijkt welke pionnen gezet kunnen worden n.a.v. het getal van de dobbelsteen (dice). Als er een pion op het startvakje staat en er staat ook minimaal 1 pion in het huis, dan moet, indien mogelijk, deze gezet worden. Als er zes wordt gegooid, moet er indien mogelijk, een nieuwe pion worden geplaatst. Er wordt dan maar 1 optie teruggegeven. In de andere gevallen wordt er voor iedere pion gekeken of deze gezet kan worden. Deze functie geeft een lijst met verplaatsbare pionnen terug.
  	 */
-	private ArrayList<Pawn> getPlayOptions (int dice) {
+	public ArrayList<Pawn> getPlayOptions (int dice) {
 		ArrayList<Pawn> playOptions=new ArrayList<Pawn>();
 		if (home.size()>0 && board.hasPawn(start) && board.getPawn(start).getPlayer()==this) { //staat er een pion op het startvakje?
 			playOptions.add(fitsOnField(board.getPawn(start),start+dice,dice));
