@@ -65,6 +65,18 @@ function throwDice() {
     event.preventDefault();
 }
 
+function movePawn2(pawn) {
+	alert("pawn");
+	if(stompClient) {
+        var chatMessage = {
+           content: 'pion '+pawn,
+            type: 'GAME'
+        };
+
+        stompClient.send("/app/chat.sendMessage", {}, JSON.stringify(chatMessage));
+    }
+    event.preventDefault();	
+}
 
 function onMessageReceived(payload) {
     var message = JSON.parse(payload.body);
