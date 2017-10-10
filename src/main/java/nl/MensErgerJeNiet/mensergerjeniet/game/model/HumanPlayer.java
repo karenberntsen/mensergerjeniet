@@ -6,7 +6,6 @@ package nl.MensErgerJeNiet.mensergerjeniet.game.model;
 
 public class HumanPlayer extends Player {
 
-
 	public HumanPlayer(String name,int start,GameBoard board) {
 		super(name,start,board);
 	}

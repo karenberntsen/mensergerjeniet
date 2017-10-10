@@ -17,7 +17,7 @@ public class MensErgerJeNiet {
 	private int dice;
 	private boolean hasThrown;
 	private boolean gameStarted;
-	private boolean isFinished;
+	private boolean finished;
 
 	/**
 	 * Constructor. Het aantal computerspelers en het aantal menselijke spelers is
@@ -50,18 +50,6 @@ public class MensErgerJeNiet {
 		playerIndex = ++playerIndex % players.size();
 	}
 
-	/**
-	 * Deze functie pauzeert het spel, opdat de menselijke spelers en toeschouwers
-	 * het spel kunnen volgen.
-	 */
-	public void sleep(int miliseconds) {
-		try {
-			Thread.sleep(miliseconds);
-		} catch (Exception ex) {
-			System.out.println(ex);
-		}
-	}
-
 	public Player getCurrentPlayer() {
 		return players.get(playerIndex);
 	}
@@ -74,12 +62,8 @@ public class MensErgerJeNiet {
 		return (pawns);
 	}
 
-	public String getBoardString() {
-		return (board.toString());
-	}
-
 	public int throwDice() {
-		if (!hasThrown) {
+		if (!hasThrown && !isFinished()) {
 			dice = (int) (Math.random() * 6 + 1);
 			hasThrown = true;
 		}
@@ -87,16 +71,17 @@ public class MensErgerJeNiet {
 	}
 	
 	public int[] getPlayOptions() {
+		if(finished || !gameStarted) return new int[0];
 		ArrayList<Pawn> playOptions =getCurrentPlayer().getPlayOptions(dice);
 		int[] options = new int[playOptions.size()];
 		for(int i = 0; i < playOptions.size(); ++i) {
 			options[i] = playOptions.get(i).getPawnNumber();
 		}
 		return options;
-			
 	}
 
 	public void doOption(int  pawnNumber) {
+		if(!gameStarted || finished) return;
 		if(!hasThrown) return;
 		Pawn pawn = getCurrentPlayer().getOptionPawn(pawnNumber,dice);
 		if (pawn!=null) {
@@ -106,10 +91,15 @@ public class MensErgerJeNiet {
 	}
 
 	private void nextTurn() {
-		isFinished = getCurrentPlayer().isWinner();
+		finished = getCurrentPlayer().isWinner();
+		if(finished) return;
 		hasThrown = false;
 		if(dice != 6) {
 			nextPlayer();
 		}
+	}
+	
+	public boolean isFinished() {
+		return finished;
 	}
  }

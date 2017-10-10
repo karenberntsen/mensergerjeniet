@@ -7,13 +7,12 @@ import java.util.ArrayList;
  */
 
 public abstract class Player {
-
 	private ArrayList<Pawn> pawns = new ArrayList<Pawn>();
-	private int start;
-	private String name;
 	private ArrayList<Pawn> home = new ArrayList<Pawn>();
 	private ArrayList<Pawn> finish = new ArrayList<Pawn>();
-	private static GameBoard board;
+	private int start;
+	private String name;
+	private GameBoard board;
 
 	/**
 	 * Constructor. Hij maakt voor deze speler vier pionnen aan en zet ze in zijn huis.
@@ -31,15 +30,6 @@ public abstract class Player {
 	}
 	public String getName() {
 		return name;
-	}
-	
-	public Pawn getPawn(int index) {
-		for (Pawn p:pawns) {
-			if (p.getPawnNumber()==index) {
-				return p;
-			}
-		}
-		return null; //Make this more beautiful
 	}
 	
 	public Pawn getOptionPawn(int index, int dice) {
@@ -119,21 +109,6 @@ public abstract class Player {
 	private boolean spaceInFinish(int newFinishField) {
 		return (newFinishField <4 && finish.get(newFinishField)==null);
 	}
-
-	/**
-	 * Deze functie representeert de beurt van de speler na het gooien van de dobbelsteen. De opties worden verzameld en vervolgens wordt daaruit gekozen. Als de speler iets verplaatst heeft wordt er een 'TRUE' teruggegeven, en als de speler niets verplaatst heeft een 'FALSE'.
- 	 */
-//	public boolean doTurn(int dice) {
-//		ArrayList<Pawn> playOptions=getPlayOptions(dice);
-//		if (playOptions.size()==0) {
-//			return false;
-//		} else {
-//			Pawn pawn = chooseOption(playOptions);
-//			movePawn(pawn,dice);
-//			return true;
-//		}
-//
-//	}
 
 	/**
 	 * Deze functie zet een pion van deze speler in het hok van deze speler.

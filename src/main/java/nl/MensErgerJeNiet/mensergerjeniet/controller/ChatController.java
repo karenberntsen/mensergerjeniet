@@ -29,7 +29,7 @@ public class ChatController {
 	public void botReplys(ChatMessage message) {
 		if (!message.getType().equals(ChatMessage.MessageType.GAME))
 			return;
-
+		if(mejn.isFinished()) return;
 		if (SecurityContextHolder.getContext().getAuthentication().getName()
 				.equals(mejn.getCurrentPlayer().getName())) {
 			if (message.getContent().equals("throw")) {
@@ -56,11 +56,6 @@ public class ChatController {
 		}
 		builder.append("]}");
 		return builder.toString();
-	}
-
-	private String getOptionsString(int[] options) {
-		
-		return null;
 	}
 
 	@MessageMapping("/chat.sendMessage")
