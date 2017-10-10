@@ -39,6 +39,7 @@ public class ChatController {
 				
 			} else if (message.getContent().startsWith("pion")) {
 				mejn.doOption(Integer.parseInt(message.getContent().split("pion")[1].trim()));
+				System.out.println(message.getContent());
 			} else if (message.getContent().equals("start")) {
 				mejn.startGame();
 			}
