@@ -18,6 +18,20 @@ var app = angular.module('myApp', [])
   $scope.greenCircles=[{"x": 9, "y": 9}, {"x": 10, "y": 9}, {"x": 9, "y": 10}, {"x": 10, "y": 10}, {"x": 9, "y": 5}, {"x": 8, "y": 5}, {"x": 7, "y": 5}, {"x": 6, "y": 5}, {"x": 10, "y": 6}];
   $scope.yellowCircles=[{"x": 0, "y": 9}, {"x": 1, "y": 9}, {"x": 0, "y": 10}, {"x": 1, "y": 10}, {"x": 5, "y": 9}, {"x": 5, "y": 8}, {"x": 5, "y": 7}, {"x": 5, "y": 6}, {"x": 4, "y": 10}];
   $scope.redCircles=[{"x": 0, "y": 0}, {"x": 1, "y": 0}, {"x": 0, "y": 1}, {"x": 1, "y": 1}, {"x": 1, "y": 5}, {"x": 2, "y": 5}, {"x": 3, "y": 5}, {"x": 4, "y": 5}, {"x": 0, "y": 4}];
+  $scope.blueCircles.Home=[{"x": 9, "y": 0}, {"x": 10, "y": 0}, {"x": 9, "y": 1}, {"x": 10, "y": 1}];
+  $scope.blueCircles.Start={"x": 6, "y": 0};
+  $scope.blueCircles.Finish=[{"x": 5, "y": 1}, {"x": 5, "y": 2}, {"x": 5, "y": 3}, {"x": 5, "y": 4}];
+  $scope.greenCircles.Home=[{"x": 9, "y": 9}, {"x": 10, "y": 9}, {"x": 9, "y": 10}, {"x": 10, "y": 10}];
+  $scope.greenCircles.Start={"x": 10, "y": 6};
+  $scope.greenCircles.Finish=[{"x": 9, "y": 5}, {"x": 8, "y": 5}, {"x": 7, "y": 5}, {"x": 6, "y": 5}];
+  $scope.yellowCircles.Home=[{"x": 0, "y": 9}, {"x": 1, "y": 9}, {"x": 0, "y": 10}, {"x": 1, "y": 10}];
+  $scope.yellowCircles.Start={"x": 4, "y": 10};
+  $scope.yellowCircles.Finish=[{"x": 5, "y": 9}, {"x": 5, "y": 8}, {"x": 5, "y": 7}, {"x": 5, "y": 6}];
+  $scope.redCircles.Home=[{"x": 0, "y": 0}, {"x": 1, "y": 0}, {"x": 0, "y": 1}, {"x": 1, "y": 1}];
+  $scope.redCircles.Start={"x": 0, "y": 4};
+  $scope.redCircles.Finish=[{"x": 1, "y": 5}, {"x": 2, "y": 5}, {"x": 3, "y": 5}, {"x": 4, "y": 5}];
+		  
+		  
   $scope.boardBorder=7;
   $scope.circleRadius=3;
   $scope.pawnRadius=2;
@@ -28,15 +42,26 @@ var app = angular.module('myApp', [])
   for(var i=1;i<11;i++) {
 		$scope.circleCoordinates[i]= $scope.circleCoordinates[i-1]+$scope.circleRadius*2+$scope.circleDistance;
   }
-
-  $scope.red1={"id": 1, "x": 0, "y": 0};
-  $scope.red2={"id": 2, "x": 0, "y": 1};
-  $scope.red3={"id": 3, "x": 1, "y": 0};
-  $scope.red4={"id": 4, "x": 1, "y": 1};
-
-	$scope.movePawn = function(id) {
-		alert("moving pawn with id: "+id);		
-	};
+  
+  $scope.pawns=[];
+  for(var i=0;i<4;i++) { 
+	  $scope.pawns[i]={"x": $scope.blueCircles.Home[i].x, "y": $scope.blueCircles.Home[i].y, "colour":"blue"};
+  }
+  for(var i = 4;i<8;i++) {
+	  $scope.pawns[i]={"x": $scope.greenCircles.Home[i%4].x, "y": $scope.greenCircles.Home[i%4].y, "colour":"green"};
+  }
+  for(var i = 8;i<12;i++) {
+	  $scope.pawns[i]={"x": $scope.yellowCircles.Home[i%4].x, "y": $scope.yellowCircles.Home[i%4].y, "colour":"yellow"};
+  }
+  for(var i = 12;i<16;i++) {
+	  $scope.pawns[i]={"x": $scope.redCircles.Home[i%4].x, "y": $scope.redCircles.Home[i%4].y, "colour":"red"};
+  }
+  
+  
+  $scope.movePawn = function() {
+	$scope.pawns[0].x=9;
+	$scope.pawns[0].y=5;
+};
   
   });
 </script>
@@ -49,12 +74,10 @@ var app = angular.module('myApp', [])
 		<circle ng-repeat="indices in yellowCircles" ng-attr-cx="{{circleCoordinates[indices.x]}}%" ng-attr-cy="{{circleCoordinates[indices.y]}}%" ng-attr-r="{{circleRadius}}%" stroke="black" stroke-width="1" fill="yellow" />
 		<circle ng-repeat="indices in redCircles" ng-attr-cx="{{circleCoordinates[indices.x]}}%" ng-attr-cy="{{circleCoordinates[indices.y]}}%" ng-attr-r="{{circleRadius}}%" stroke="black" stroke-width="1" fill="red" />		
 	    <image id="dice" onclick="throwDice()" xlink:href="img/1.png" ng-attr-x="{{circleCoordinates[5]-circleRadius}}%" ng-attr-y="{{circleCoordinates[5]-circleRadius}}%" height="{{2*circleRadius}}%" width="{{2*circleRadius}}%"/>
-<!--		<circle id="red1.pawn" ng-click="movePawn(red1.id)" ng-attr-cx="{{circleCoordinates[red1.x]}}%" ng-attr-cy="{{circleCoordinates[red1.y]}}%" ng-attr-r="{{pawnRadius}}%" stroke="black" stroke-width="1" fill="red" />
-		<circle id="red2.pawn" ng-click="movePawn(red2.id)" ng-attr-cx="{{circleCoordinates[red2.x]}}%" ng-attr-cy="{{circleCoordinates[red2.y]}}%" ng-attr-r="{{pawnRadius}}%" stroke="black" stroke-width="1" fill="red" />
-		<circle id="red3.pawn" ng-click="movePawn(red3.id)"" ng-attr-cx="{{circleCoordinates[red3.x]}}%" ng-attr-cy="{{circleCoordinates[red3.y]}}%" ng-attr-r="{{pawnRadius}}%" stroke="black" stroke-width="1" fill="red" />
-		<circle id="red4.pawn" ng-click="movePawn(red4.id)" ng-attr-cx="{{circleCoordinates[red4.x]}}%" ng-attr-cy="{{circleCoordinates[red4.y]}}%" ng-attr-r="{{pawnRadius}}%" stroke="black" stroke-width="1" fill="red" />-->
--->
-
+		<circle id="red1.pawn" ng-click="movePawn()" ng-attr-cx="{{circleCoordinates[pawns[12].x]}}%" ng-attr-cy="{{circleCoordinates[pawns[12].y]}}%" ng-attr-r="{{pawnRadius}}%" stroke="black" stroke-width="1" fill="{{pawns[12].colour}}" />
+		<circle id="red2.pawn" onclick="movePawn2('red2.pawn')" ng-attr-cx="{{circleCoordinates[pawns[13].x]}}%" ng-attr-cy="{{circleCoordinates[pawns[13].y]}}%" ng-attr-r="{{pawnRadius}}%" stroke="black" stroke-width="1" fill="{{pawns[12].colour}}" />
+		<circle id="red3.pawn" onclick="movePawn2('red3')" ng-attr-cx="{{circleCoordinates[pawns[14].x]}}%" ng-attr-cy="{{circleCoordinates[pawns[14].y]}}%" ng-attr-r="{{pawnRadius}}%" stroke="black" stroke-width="1" fill="{{pawns[12].colour}}" />
+		<circle id="red4.pawn" onclick="movePawn2('red4')" ng-attr-cx="{{circleCoordinates[pawns[15].x]}}%" ng-attr-cy="{{circleCoordinates[pawns[15].y]}}%" ng-attr-r="{{pawnRadius}}%" stroke="black" stroke-width="1" fill="{{pawns[12].colour}}" />
 
 </svg>
 <div id="chat-page">
