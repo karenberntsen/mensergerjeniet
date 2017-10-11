@@ -65,6 +65,18 @@ function throwDice() {
     event.preventDefault();
 }
 
+function throwDice() {
+    if(stompClient) {
+        var chatMessage = {
+            content: 'start',
+            type: 'GAME'
+        };
+
+        stompClient.send("/app/chat.sendMessage", {}, JSON.stringify(chatMessage));
+    }
+    event.preventDefault();
+}
+
 function movePawn2(pawn) {
 	alert("pawn");
 	if(stompClient) {
@@ -89,7 +101,13 @@ function onMessageReceived(payload) {
     } else if (message.type === 'LEAVE') {
         messageElement.classList.add('event-message');
         message.content = message.sender + ' left!';
-    }else if (message.type === 'GAME') {
+    }else if (message.type === 'GAME_START') {
+        messageElement.classList.add('event-message');
+        
+        var data = JSON.parse(message.content);
+        //data[{id, location, index},{..},{..}]
+        //TODO game stuff
+    }else if (message.type === 'GAME_OPTIONS') {
         messageElement.classList.add('event-message');
         
         var data = JSON.parse(message.content);

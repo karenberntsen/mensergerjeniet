@@ -12,13 +12,14 @@ import java.util.ArrayList;
 public class MensErgerJeNiet {
 
 	private ArrayList<Player> players = new ArrayList<Player>();
+	private ArrayList<Pawn> pawns = new ArrayList<Pawn>();
 	private int playerIndex = 0;
 	private static GameBoard board = new GameBoard();
 	private int dice;
 	private boolean hasThrown;
 	private boolean gameStarted;
 	private boolean finished;
-
+	
 	/**
 	 * Constructor. Het aantal computerspelers en het aantal menselijke spelers is
 	 * nodig als input.
@@ -35,6 +36,7 @@ public class MensErgerJeNiet {
 		if (gameStarted) return;
 		if (players.size() > 3) return;
 		players.add(player);
+		pawns.addAll(player.getPawns());
 	}
 
 	public void startGame() {
@@ -54,19 +56,11 @@ public class MensErgerJeNiet {
 		return players.get(playerIndex);
 	}
 
-	public ArrayList<Pawn> getPawns() {
-		ArrayList<Pawn> pawns = new ArrayList<Pawn>();
-		for (Player player : players) {
-			pawns.addAll(player.getPawns());
-		}
-		return (pawns);
-	}
-
 	public int throwDice() {
-		if (!hasThrown && !isFinished()) {
+//		if (!hasThrown && !isFinished()) {
 			dice = (int) (Math.random() * 6 + 1);
 			hasThrown = true;
-		}
+//		}
 		return dice;
 	}
 	
@@ -75,16 +69,16 @@ public class MensErgerJeNiet {
 		ArrayList<Pawn> playOptions =getCurrentPlayer().getPlayOptions(dice);
 		int[] options = new int[playOptions.size()];
 		for(int i = 0; i < playOptions.size(); ++i) {
-			options[i] = playOptions.get(i).getPawnNumber();
+			options[i] = pawns.indexOf(playOptions.get(i));
 		}
 		return options;
 	}
 
-	public void doOption(int  pawnNumber) {
+	public void doOption(int  indexPawn) {
 		if(!gameStarted || finished) return;
 		if(!hasThrown) return;
-		Pawn pawn = getCurrentPlayer().getOptionPawn(pawnNumber,dice);
-		if (pawn!=null) {
+		Pawn pawn = pawns.get(indexPawn);
+		if(getCurrentPlayer().getPlayOptions(dice).contains(pawn)) {
 			getCurrentPlayer().movePawn(pawn,dice);
 			nextTurn();
 		}
@@ -97,6 +91,10 @@ public class MensErgerJeNiet {
 		if(dice != 6) {
 			nextPlayer();
 		}
+	}
+	
+	public ArrayList<Pawn> getPawns() {
+		return pawns;
 	}
 	
 	public boolean isFinished() {

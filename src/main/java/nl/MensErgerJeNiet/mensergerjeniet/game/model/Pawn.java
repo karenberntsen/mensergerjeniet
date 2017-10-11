@@ -1,7 +1,10 @@
 package nl.MensErgerJeNiet.mensergerjeniet.game.model;
 
 /**
- * Deze klasse representeert een pion. De locatie geeft aan of de pion zich in het huis, in het hok of op het bord bevindt. Het pionnummer (pawnNumber) is een nummer tussen de 1 en 4. Hiermee kan onderscheid gemaakt worden tussen de verschillende pionnen van een speler (player).
+ * Deze klasse representeert een pion. De locatie geeft aan of de pion zich in
+ * het huis, in het hok of op het bord bevindt. Het pionnummer (pawnNumber) is
+ * een nummer tussen de 1 en 4. Hiermee kan onderscheid gemaakt worden tussen de
+ * verschillende pionnen van een speler (player).
  */
 
 public class Pawn {
@@ -12,17 +15,17 @@ public class Pawn {
 
 	@Override
 	public String toString() {
-		return ("Pion "+pawnNumber);
+		return ("Pion " + pawnNumber);
 	}
 
 	public int getPawnNumber() {
-		return(pawnNumber);
+		return (pawnNumber);
 	}
 
-	public Pawn(Player player,int number) {
-		this.player=player;
-		this.location=Location.HOME;
-		this.pawnNumber=number;
+	public Pawn(Player player, int number) {
+		this.player = player;
+		this.location = Location.HOME;
+		this.pawnNumber = number;
 	}
 
 	public Location getLocation() {
@@ -30,11 +33,24 @@ public class Pawn {
 	}
 
 	public void setLocation(Location location) {
-		this.location=location;
+		this.location = location;
 	}
 
 	public Player getPlayer() {
 		return this.player;
+	}
+
+	public int getIndex() {
+		switch (location) {
+		case HOME:
+			return indexOfHome();
+		case FINISH:
+			return indexOfFinish();
+
+		case BOARD:
+			return indexOfBoard();
+		}
+		return -1;
 	}
 
 	public int indexOfHome() {
@@ -49,4 +65,3 @@ public class Pawn {
 		return player.getGameBoard().getLocation(this);
 	}
 }
-

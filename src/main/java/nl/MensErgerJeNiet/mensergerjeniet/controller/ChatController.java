@@ -1,5 +1,7 @@
 package nl.MensErgerJeNiet.mensergerjeniet.controller;
 
+import java.util.ArrayList;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import nl.MensErgerJeNiet.mensergerjeniet.config.security.CustomUserDetails;
 import nl.MensErgerJeNiet.mensergerjeniet.game.model.MensErgerJeNiet;
+import nl.MensErgerJeNiet.mensergerjeniet.game.model.Pawn;
 
 /**
  * Created by rajeevkumarsingh on 24/07/17.
@@ -42,8 +45,27 @@ public class ChatController {
 				System.out.println(message.getContent());
 			} else if (message.getContent().equals("start")) {
 				mejn.startGame();
+				
+				message.setContent(startPosContent());
 			}
 		}
+	}
+
+	private String startPosContent() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("[ ");
+		ArrayList<Pawn> pawns = mejn.getPawns();
+		for(int i = 0; i < pawns.size(); ++i) {
+
+			builder.append("{");
+			builder.append(" \"id\"").append(i).append(" , \"location\": ").append(pawns.get(i).getLocation()).append(", \"index\": ").append(pawns.get(i).getIndex());
+			builder.append("}");
+			if(i < pawns.size()-1) {
+				builder.append(", ");
+			}
+		}
+		builder.append("]");
+		return builder.toString();
 	}
 
 	private String getContentString(int dice, int[] options) {

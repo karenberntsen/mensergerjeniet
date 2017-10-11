@@ -28,23 +28,15 @@ var app = angular.module('myApp', [])
   for(var i=1;i<11;i++) {
 		$scope.circleCoordinates[i]= $scope.circleCoordinates[i-1]+$scope.circleRadius*2+$scope.circleDistance;
   }
-  
-  $scope.red1={"x": 0, "y": 0};
-  $scope.red2={"x": 0, "y": 1};
 
-  //$scope.red1.x=0;
-  //$scope.red1.y=0;
-  //$scope.red2.x=0;
-  //$scope.red2.y=1;
-  //$scope.red3.x=1;
-  //$scope.red3.y=1;
-  //$scope.red4.x=0;
-  //$scope.red4.y=1;
-  
-  $scope.movePawn = function() {
-	$scope.red1.x=9;
-	$scope.red1.y=9;
-};
+  $scope.red1={"id": 1, "x": 0, "y": 0};
+  $scope.red2={"id": 2, "x": 0, "y": 1};
+  $scope.red3={"id": 3, "x": 1, "y": 0};
+  $scope.red4={"id": 4, "x": 1, "y": 1};
+
+	$scope.movePawn = function(id) {
+		alert("moving pawn with id: "+id);		
+	};
   
   });
 </script>
@@ -57,10 +49,12 @@ var app = angular.module('myApp', [])
 		<circle ng-repeat="indices in yellowCircles" ng-attr-cx="{{circleCoordinates[indices.x]}}%" ng-attr-cy="{{circleCoordinates[indices.y]}}%" ng-attr-r="{{circleRadius}}%" stroke="black" stroke-width="1" fill="yellow" />
 		<circle ng-repeat="indices in redCircles" ng-attr-cx="{{circleCoordinates[indices.x]}}%" ng-attr-cy="{{circleCoordinates[indices.y]}}%" ng-attr-r="{{circleRadius}}%" stroke="black" stroke-width="1" fill="red" />		
 	    <image id="dice" onclick="throwDice()" xlink:href="img/1.png" ng-attr-x="{{circleCoordinates[5]-circleRadius}}%" ng-attr-y="{{circleCoordinates[5]-circleRadius}}%" height="{{2*circleRadius}}%" width="{{2*circleRadius}}%"/>
-		<circle id="red1.pawn" ng-click="movePawn()" ng-attr-cx="{{circleCoordinates[red1.x]}}%" ng-attr-cy="{{circleCoordinates[red1.y]}}%" ng-attr-r="{{pawnRadius}}%" stroke="black" stroke-width="1" fill="red" />
-		<circle id="red2.pawn" onclick="movePawn2('red2.pawn')" ng-attr-cx="{{circleCoordinates[red2.x]}}%" ng-attr-cy="{{circleCoordinates[red2.y]}}%" ng-attr-r="{{pawnRadius}}%" stroke="black" stroke-width="1" fill="red" />
-		<!--  --><circle id="red3.pawn" onclick="movePawn(red3)" ng-attr-cx="{{circleCoordinates[red3.x]}}%" ng-attr-cy="{{circleCoordinates[red3.y]}}%" ng-attr-r="{{pawnRadius}}%" stroke="black" stroke-width="1" fill="red" />
-		<circle id="red4.pawn" onclick="movePawn(red4)" ng-attr-cx="{{circleCoordinates[red4.x]}}%" ng-attr-cy="{{circleCoordinates[red4.y]}}%" ng-attr-r="{{pawnRadius}}%" stroke="black" stroke-width="1" fill="red" />-->
+<!--		<circle id="red1.pawn" ng-click="movePawn(red1.id)" ng-attr-cx="{{circleCoordinates[red1.x]}}%" ng-attr-cy="{{circleCoordinates[red1.y]}}%" ng-attr-r="{{pawnRadius}}%" stroke="black" stroke-width="1" fill="red" />
+		<circle id="red2.pawn" ng-click="movePawn(red2.id)" ng-attr-cx="{{circleCoordinates[red2.x]}}%" ng-attr-cy="{{circleCoordinates[red2.y]}}%" ng-attr-r="{{pawnRadius}}%" stroke="black" stroke-width="1" fill="red" />
+		<circle id="red3.pawn" ng-click="movePawn(red3.id)"" ng-attr-cx="{{circleCoordinates[red3.x]}}%" ng-attr-cy="{{circleCoordinates[red3.y]}}%" ng-attr-r="{{pawnRadius}}%" stroke="black" stroke-width="1" fill="red" />
+		<circle id="red4.pawn" ng-click="movePawn(red4.id)" ng-attr-cx="{{circleCoordinates[red4.x]}}%" ng-attr-cy="{{circleCoordinates[red4.y]}}%" ng-attr-r="{{pawnRadius}}%" stroke="black" stroke-width="1" fill="red" />-->
+-->
+
 
 </svg>
 <div id="chat-page">
