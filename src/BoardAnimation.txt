@@ -1,0 +1,320 @@
+package mensErgerJeNiet.view;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.Color;
+import mensErgerJeNiet.model.Pawn;
+import mensErgerJeNiet.model.Location;
+import mensErgerJeNiet.model.GameBoard;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.awt.font.TextLayout;
+
+/**
+ * Deze klasse representeert het visuele bord. Vakjes, pionnen en de waarde op de dobbelsteen worden door deze klasse getekend. Het bord kan in verschillende groottes worden getekend (frameSize). Op basis van de frameSize worden de mogelijke 11 coordinaatwaardes van de vakjes berekend (circleCoordinates). circleCoordinates[a] geeft het coordinaat van de cirkel met index a. boardX en boardY representeren de witte vakjes op het bord in cirkelindices. Deze cirkelindices zijn onafhankelijk van de frameSize. boardBorder is een maat voor de afstand tussen de rand en de eerste cirkel, circleSize, de grootte van een vakje, pawnBorder de grootte van de pion inclusief randje en pawnFill de grootte van de pion exclusief randje. CircleDistance is de afstand tussen twee vakjes. DiceCube is een hashMap die het getal op de dobbelsteen matcht met een dobbelsteenplaatje. StartColourMap geeft aan welk startvakje overeenkomt met welke kleur. In dit geval is startvakje de link met de bijbehorende speler. ColourIndices is een map die per kleur aangeeft welke cirkels in die kleur getekend moeten worden. Pawns is een lijst met alle pionnen in het spel.
+ */
+
+public class BoardAnimation {
+
+	int[] circleCoordinates=new int[11];
+	final ArrayList<Integer> boardX = fromArrayToArrayList(new int[]{6,6,6,6,6,7,8,9,10,10,10,9,8,7,6,6,6,6,6,5,4,4,4,4,4,3,2,1,0,0,0,1,2,3,4,4,4,4,4,5});
+	final ArrayList<Integer> boardY = fromArrayToArrayList(new int[]{0,1,2,3,4,4,4,4,4,5,6,6,6,6,6,7,8,9,10,10,10,9,8,7,6,6,6,6,6,5,4,4,4,4,4,3,2,1,0,0});
+	final HashMap<Color,Indices> colourIndices = makeColourIndices();
+	int frameSize;
+	int factor=100;
+	int boardBorder;
+	int circleSize;
+	int pawnBorder;
+	int pawnFill;
+	int pawnTextBorder;
+	int circleDistance;
+	int dice=6;
+	ArrayList<Pawn> pawns;
+	HashMap<Integer,Image> diceCube=makeDiceCube();
+	BoardPanel boardPanel;
+  	private static final HashMap<Integer,Color> startColourMap = makeStartColourMap();
+	
+	private static HashMap<Integer,Color> makeStartColourMap() {
+      	  HashMap<Integer,Color> startColourMap = new HashMap<Integer,Color>();
+      	  startColourMap.put(40,Color.blue);
+      	  startColourMap.put(10,Color.green);
+      	  startColourMap.put(20,Color.yellow);
+      	  startColourMap.put(30,Color.red);
+      	  return startColourMap;
+   	 }
+
+	private HashMap<Color,Indices> makeColourIndices() {
+		HashMap<Color,Indices> colourIndices = new HashMap<Color,Indices>();
+		colourIndices.put(Color.blue,new Indices(new int[]{9,10,9,10},new int[]{0,0,1,1},new int[]{5,5,5,5},new int[]{1,2,3,4},6,0));
+		colourIndices.put(Color.green,new Indices(new int[]{9,10,9,10},new int[]{9,9,10,10},new int[]{9,8,7,6},new int[]{5,5,5,5},10,6));
+		colourIndices.put(Color.yellow,new Indices(new int[]{0,1,0,1},new int[]{9,9,10,10},new int[]{5,5,5,5},new int[]{9,8,7,6},4,10));
+		colourIndices.put(Color.red,new Indices(new int[]{0,1,0,1},new int[]{0,0,1,1},new int[]{1,2,3,4},new int[]{5,5,5,5},0,4));
+		return colourIndices;
+	}
+
+	/**
+	 * Deze functie maakt een map tussen de waarde op de dobbelsteen en een plaatje van de dobbelsteen.
+ 	 */
+	private HashMap<Integer,Image> makeDiceCube() {
+		HashMap<Integer,Image> diceCube = new HashMap<Integer,Image>();
+		diceCube.put(1,new ImageIcon("../resources/een.png").getImage());
+		diceCube.put(2,new ImageIcon("../resources/twee.png").getImage());
+		diceCube.put(3,new ImageIcon("../resources/drie.png").getImage());
+		diceCube.put(4,new ImageIcon("../resources/vier.png").getImage());
+		diceCube.put(5,new ImageIcon("../resources/vijf.png").getImage());
+		diceCube.put(6,new ImageIcon("../resources/zes.png").getImage());
+		return diceCube;
+	}
+
+	/**
+	 * Constructor. De lijst met pionnen moet meegegeven worden als input. Als er geen frameSize wordt gekozen wordt deze op 800 gezet.
+ 	 */
+	public BoardAnimation(ArrayList<Pawn> pawns) {
+		this(pawns,800);
+	}
+
+	public BoardAnimation(ArrayList<Pawn> pawns,int frameSize) {
+		this.pawns=pawns;
+		this.frameSize=frameSize;
+		calculateSizes();
+		makeIndices();
+		startWindow();
+	}
+
+	/**
+	 * Deze functie berekent de grootte van de verschillende afstanden op het bord, afhankelijk van de frameSize.
+ 	 */
+	private void calculateSizes() {
+		boardBorder=7*frameSize/factor;
+		circleSize=6*frameSize/factor;
+		pawnBorder=4*frameSize/factor;
+		pawnFill=2*frameSize/factor;
+		circleDistance=2*frameSize/factor;
+	}
+
+	/**
+	 * Deze functie berekent de coordinaten van alle 11 mogelijke cirkelposities.
+ 	 */
+	private void makeIndices() {
+		circleCoordinates[0]=boardBorder;
+		for (int i=1; i<11; i++) {
+			circleCoordinates[i]= circleCoordinates[i-1]+circleSize+circleDistance;
+		}
+		
+	}
+
+	/**
+	 * Deze functie initieert een update van het visuele bord.
+ 	 */	
+	public void updateWindow(int dice) {
+		this.dice=dice;
+		boardPanel.repaint();
+	}
+
+	/**
+	 * Deze functie genereert het bord.
+ 	 */
+	public void startWindow() {
+		JFrame frame = new JFrame();
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		this.boardPanel = new BoardPanel();
+
+		frame.getContentPane().add(boardPanel);
+		frame.setSize(frameSize,frameSize);
+		frame.setVisible(true);
+	}
+
+	/**
+	 * Deze functie zet een array van ints om in een ArrayList van Integers.
+ 	 */
+	private ArrayList<Integer> fromArrayToArrayList(int[] oldList) {
+		ArrayList<Integer> newList = new ArrayList<Integer>();
+		for (int i:oldList) {
+			newList.add(i);
+		}
+		return newList;
+	}
+
+	/**
+	 * Deze klasse wordt gebruikt om de vakjes die bij een specifieke speler horen op te slaan. HomeX en homeY zijn de circelIndices van het huis, finishX en finisY die van het hok en startX en startY die van de startpositie.
+ 	 */
+	class Indices {
+		private ArrayList<Integer> homeX;
+		private ArrayList<Integer> homeY;
+		private ArrayList<Integer> finishX;
+		private ArrayList<Integer> finishY;
+		private int startX;
+		private int startY;
+		
+		private Indices(int[] homeX, int[] homeY, int[] finishX, int[] finishY, int startX, int startY) {
+			this.homeX=fromArrayToArrayList(homeX);
+			this.homeY=fromArrayToArrayList(homeY);
+			this.finishX=fromArrayToArrayList(finishX);
+			this.finishY=fromArrayToArrayList(finishY);
+			this.startX=startX;
+			this.startY=startY;
+		}
+
+		/**
+		 * Deze functie geeft alle x indices van alle vakjes in een lijst.
+	 	 */
+		private ArrayList<Integer> allX() {
+			ArrayList<Integer> allX= new ArrayList<Integer>();
+			allX.addAll(homeX);
+			allX.addAll(finishX);
+			allX.add(startX);
+			return allX;
+		}
+
+		/**
+		 * Deze functie geeft alle y indices van alle vakjes in een lijst.
+	 	 */
+		private ArrayList<Integer> allY() {
+			ArrayList<Integer> allY= new ArrayList<Integer>();
+			allY.addAll(homeY);
+			allY.addAll(finishY);
+			allY.add(startY);
+			return allY;
+		}
+
+		public ArrayList<Integer> getHomeX() {
+			return homeX;
+		}
+
+		public ArrayList<Integer> getHomeY() {
+			return homeY;
+		}
+
+		public ArrayList<Integer> getFinishX() {
+			return finishX;
+		}
+
+		public ArrayList<Integer> getFinishY() {
+			return finishY;
+		}
+
+		public int getStartX() {
+			return startX;
+		}
+
+		public int getStartY() {
+			return startY;
+		}
+		
+	}
+	
+	/**
+	 * Deze klasse tekent het bord, de pionnen en de dobbelsteen.
+	 */
+	class BoardPanel extends JPanel {
+
+		public void paintComponent(Graphics g) {
+			drawBoard(g);
+			for (Pawn pawn:pawns) {
+				drawPawn(g,pawn);
+			}
+			drawDiceCube(g);
+		}
+
+		/**
+		 * Deze functie tekent de dobbelsteen.
+	 	 */
+		private void drawDiceCube(Graphics g) {
+			g.drawImage(diceCube.get(dice),circleCoordinates[5],circleCoordinates[5],circleSize,circleSize,Color.gray,this);		
+		}
+
+		/**
+		 * Deze functie tekent een pion. Afhankelijk van de locatie worden de bijbehorende circleCoordinates opgevraagd en deze worden daarna gebruikt om de pion te tekenen. De kleur van de pion is afhankelijk van het startVakje van de speler.
+	 	 */
+		private void drawPawnOld(Graphics g,Pawn pawn){
+			g.setColor(Color.black);
+			Color colour=startColourMap.get(pawn.getPlayer().getStart());
+			int x=0;
+			int y=0;
+			int index=0;
+			switch (pawn.getLocation()) {
+				case HOME:
+					index=pawn.indexOfHome();
+					x= colourIndices.get(colour).getHomeX().get(index);
+					y= colourIndices.get(colour).getHomeY().get(index);
+					break;
+				case BOARD:
+					index=pawn.indexOfBoard();
+					x=boardX.get(index);
+					y=boardY.get(index);
+					break;
+				case FINISH:
+					index=pawn.indexOfFinish();
+					x= colourIndices.get(colour).getFinishX().get(index);
+					y= colourIndices.get(colour).getFinishY().get(index);
+					break;
+				default:
+					System.out.println("Onbekende locatie");
+					break;
+			}
+			g.fillOval(circleCoordinates[x]+frameSize/factor,circleCoordinates[y]+frameSize/factor,pawnBorder,pawnBorder);
+			g.setColor(colour);
+			g.fillOval(circleCoordinates[x]+2*frameSize/factor,circleCoordinates[y]+2*frameSize/factor,pawnFill,pawnFill);
+		}
+
+		private void drawPawn(Graphics g,Pawn pawn){
+			Graphics2D g2d = (Graphics2D) g;
+			g2d.setColor(Color.black);
+			Color colour=startColourMap.get(pawn.getPlayer().getStart());
+			int x=0;
+			int y=0;
+			int index=0;
+			switch (pawn.getLocation()) {
+				case HOME:
+					index=pawn.indexOfHome();
+					x= colourIndices.get(colour).getHomeX().get(index);
+					y= colourIndices.get(colour).getHomeY().get(index);
+					break;
+				case BOARD:
+					index=pawn.indexOfBoard();
+					x=boardX.get(index);
+					y=boardY.get(index);
+					break;
+				case FINISH:
+					index=pawn.indexOfFinish();
+					x= colourIndices.get(colour).getFinishX().get(index);
+					y= colourIndices.get(colour).getFinishY().get(index);
+					break;
+				default:
+					System.out.println("Onbekende locatie");
+					break;
+			}
+			Font font =new Font("Ingeborg Regular", Font.BOLD,circleSize); 
+			TextLayout tl = new TextLayout(pawn.getPawnNumber()+"", font, g2d.getFontRenderContext());
+			Shape shape = tl.getOutline(null);
+			g2d.translate(circleCoordinates[x]+frameSize/factor,circleCoordinates[y]+0.85*circleSize);
+			g2d.setColor(colour);
+			g2d.fill(shape);
+			g2d.setColor(Color.black);
+			g2d.draw(shape);
+			g2d.translate(-circleCoordinates[x]-frameSize/factor,-circleCoordinates[y]-0.85*circleSize);
+		}
+
+		/**
+		 * Deze functie tekent de het bord.
+	 	 */
+		private void drawBoard(Graphics g) {
+			g.setColor(Color.gray);
+			g.fillRect(0,0,this.getWidth(), this.getHeight());
+			g.setColor(Color.white);
+			for (int i=0; i<boardX.size(); i++) { //deze loop tekent de witte vakjes
+				g.fillOval(circleCoordinates[boardX.get(i)],circleCoordinates[boardY.get(i)],circleSize,circleSize);
+			}
+			for (Color colour:colourIndices.keySet()) { //loop over alle kleuren
+				g.setColor(colour);
+				ArrayList<Integer> allX=colourIndices.get(colour).allX();
+				ArrayList<Integer> allY=colourIndices.get(colour).allY();
+				for (int i=0;i<allX.size();i++) { //deze loop tekent de gekleurde vakjes
+					g.fillOval(circleCoordinates[allX.get(i)],circleCoordinates[allY.get(i)],circleSize,circleSize);
+				}
+			}
+		}
+
+	}
+}
