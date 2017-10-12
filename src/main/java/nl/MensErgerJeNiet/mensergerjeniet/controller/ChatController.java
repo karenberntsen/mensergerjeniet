@@ -18,6 +18,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import nl.MensErgerJeNiet.mensergerjeniet.config.security.CustomUserDetails;
+import nl.MensErgerJeNiet.mensergerjeniet.controller.ChatMessage.MessageType;
 import nl.MensErgerJeNiet.mensergerjeniet.game.model.MensErgerJeNiet;
 import nl.MensErgerJeNiet.mensergerjeniet.game.model.Pawn;
 
@@ -38,27 +39,31 @@ public class ChatController {
 			if (message.getContent().equals("throw")) {
 				int dice = mejn.throwDice();
 				int[] options = mejn.getPlayOptions();
+				message.setType(MessageType.GAME_OPTIONS);
 				message.setContent(getContentString(dice,options));
 				
 			} else if (message.getContent().startsWith("pion")) {
 				mejn.doOption(Integer.parseInt(message.getContent().split("pion")[1].trim()));
+
+				message.setType(MessageType.GAME_START);
+				message.setContent(pawnPosContent());
 			} else if (message.getContent().equals("start")) {
 				mejn.startGame();
-				
-				message.setContent(startPosContent());
+				message.setType(MessageType.GAME_START);
+				message.setContent(pawnPosContent());
 			}
 		}
 	}
 
-	private String startPosContent() {
+	private String pawnPosContent() {
 		StringBuilder builder = new StringBuilder();
 		builder.append("[ ");
 		ArrayList<Pawn> pawns = mejn.getPawns();
 		for(int i = 0; i < pawns.size(); ++i) {
-
 			builder.append("{");
-			builder.append(" \"id\"").append(i).append(" , \"location\": ").append(pawns.get(i).getLocation()).append(", \"index\": ").append(pawns.get(i).getIndex());
-			builder.append("}");
+			builder.append(" \"id\":").append(i).
+			append(" , \"location\": \"").append(pawns.get(i).getLocation()).append("\"").
+			append(", \"index\": ").append(pawns.get(i).getIndex()) .append("}");
 			if(i < pawns.size()-1) {
 				builder.append(", ");
 			}

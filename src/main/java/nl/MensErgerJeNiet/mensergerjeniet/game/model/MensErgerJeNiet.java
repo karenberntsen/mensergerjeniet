@@ -57,10 +57,10 @@ public class MensErgerJeNiet {
 	}
 
 	public int throwDice() {
-//		if (!hasThrown && !isFinished()) {
+		if (!hasThrown && !isFinished()) {
 			dice = (int) (Math.random() * 6 + 1);
 			hasThrown = true;
-//		}
+		}
 		return dice;
 	}
 	

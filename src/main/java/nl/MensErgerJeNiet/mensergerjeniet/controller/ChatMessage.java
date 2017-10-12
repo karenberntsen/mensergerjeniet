@@ -12,7 +12,9 @@ public class ChatMessage {
         CHAT,
         JOIN,
         LEAVE,
-        GAME
+        GAME,
+        GAME_START,
+        GAME_OPTIONS
     }
 
     public MessageType getType() {
