@@ -34,29 +34,35 @@ public class ChatController {
 		if (!message.getType().equals(ChatMessage.MessageType.GAME))
 			return;
 		if(mejn.isFinished()) return;
-		if (SecurityContextHolder.getContext().getAuthentication().getName()
-				.equals(mejn.getCurrentPlayer().getName())) {
+		
+		message.setSender(SecurityContextHolder.getContext().getAuthentication().getName());
+		if (message.getContent().equals("start")) { // iedereen kan het spel starten
+			mejn.startGame();
+			sendDataMessage(message);
+		}else if (SecurityContextHolder.getContext().getAuthentication().getName()
+				.equals(mejn.getCurrentPlayer().getName())) { // alleen de speler die aan de beurt is mag acties uitvoeren
 			if (message.getContent().equals("throw")) {
-				int dice = mejn.throwDice();
-				int[] options = mejn.getPlayOptions();
-				message.setType(MessageType.GAME_OPTIONS);
-				message.setContent(getContentString(dice,options));
-				
+				mejn.throwDice();
 			} else if (message.getContent().startsWith("pion")) {
 				mejn.doOption(Integer.parseInt(message.getContent().split("pion")[1].trim()));
-
-				message.setType(MessageType.GAME_START);
-				message.setContent(pawnPosContent());
-			} else if (message.getContent().equals("start")) {
-				mejn.startGame();
-				message.setType(MessageType.GAME_START);
-				message.setContent(pawnPosContent());
 			}
+			sendDataMessage(message);
 		}
+	}
+		
+
+	private void sendDataMessage(ChatMessage message) {
+		int dice = mejn.getDice();
+		int playerIndex = mejn.getPlayerIndex();
+		int[] options = mejn.getPlayOptions();
+		message.setType(MessageType.GAME_OPTIONS);
+		message.setContent(getContentString(dice, playerIndex, options));
+		
 	}
 
 	private String pawnPosContent() {
 		StringBuilder builder = new StringBuilder();
+		
 		builder.append("[ ");
 		ArrayList<Pawn> pawns = mejn.getPawns();
 		for(int i = 0; i < pawns.size(); ++i) {
@@ -72,9 +78,12 @@ public class ChatController {
 		return builder.toString();
 	}
 
-	private String getContentString(int dice, int[] options) {
+	private String getContentString(int dice, int playerIndex, int[] options) {
 		StringBuilder builder = new StringBuilder();
-		builder.append("{ \"dice\":").append(dice).append(" , \"options\": [");
+		builder.append("{ \"dice\":").append(dice).
+		append(", \"pid\": ").append(playerIndex).
+		append(", \"pawns\": ").append(pawnPosContent()).
+		append(" , \"options\": [");
 		for(int i = 0; i < options.length; ++i) {
 			builder.append(options[i]);
 			if(i < options.length-1) {

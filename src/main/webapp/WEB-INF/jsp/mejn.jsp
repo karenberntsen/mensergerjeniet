@@ -216,9 +216,11 @@ $scope.conn();
 			<circle ng-repeat="indices in yellowCircles" ng-attr-cx="{{circleCoordinates[indices.x]}}%" ng-attr-cy="{{circleCoordinates[indices.y]}}%" ng-attr-r="{{circleRadius}}%" stroke="black" stroke-width="1" fill="yellow" />
 			<circle ng-repeat="indices in redCircles" ng-attr-cx="{{circleCoordinates[indices.x]}}%" ng-attr-cy="{{circleCoordinates[indices.y]}}%" ng-attr-r="{{circleRadius}}%" stroke="black" stroke-width="1" fill="red" />		
 		    <image id="dice" ng-click="throwDice()" xlink:href="img/1.png" ng-attr-x="{{circleCoordinates[5]-circleRadius}}%" ng-attr-y="{{circleCoordinates[5]-circleRadius}}%" height="{{2*circleRadius}}%" width="{{2*circleRadius}}%"/>
-			
-			<circle ng-repeat="pawn in pawns" id="{{pawn.id}}" ng-click="movePawn(pawn.id)" ng-attr-cx="{{circleCoordinates[pawn.x]}}%" ng-attr-cy="{{circleCoordinates[pawn.y]}}%" ng-attr-r="{{pawnRadius}}%" stroke="black" stroke-width="1" fill="{{pawn.colour}}" />
-			
+			<g ng-repeat="pawn in pawns" ng-attr-cx="{{circleCoordinates[pawn.x]}}%" ng-attr-cy="{{circleCoordinates[pawn.y]}}%" >
+				<circle  id="{{pawn.id}}" ng-click="movePawn(pawn.id)" ng-attr-r="{{pawnRadius}}%" stroke="black" stroke-width="1" fill="{{pawn.colour}}">
+				</circle>
+				<text text-anchor="middle" stroke="#51c5cf" stroke-width="2px" dy=".3em">{{pawn.id}}</text>
+			</g>
 			<!-- <circle id="red1.pawn" ng-click="movePawn()" ng-attr-cx="{{circleCoordinates[pawns[12].x]}}%" ng-attr-cy="{{circleCoordinates[pawns[12].y]}}%" ng-attr-r="{{pawnRadius}}%" stroke="black" stroke-width="1" fill="{{pawns[12].colour}}" />
 			<circle id="red2.pawn" ng-click="movePawn()" ng-attr-cx="{{circleCoordinates[pawns[13].x]}}%" ng-attr-cy="{{circleCoordinates[pawns[13].y]}}%" ng-attr-r="{{pawnRadius}}%" stroke="black" stroke-width="1" fill="{{pawns[12].colour}}" />
 			<circle id="red3.pawn" ng-click="movePawn()" ng-attr-cx="{{circleCoordinates[pawns[14].x]}}%" ng-attr-cy="{{circleCoordinates[pawns[14].y]}}%" ng-attr-r="{{pawnRadius}}%" stroke="black" stroke-width="1" fill="{{pawns[12].colour}}" />

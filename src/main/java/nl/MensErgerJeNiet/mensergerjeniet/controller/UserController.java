@@ -2,6 +2,7 @@ package nl.MensErgerJeNiet.mensergerjeniet.controller;
 
 import java.security.NoSuchAlgorithmException;
 
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -46,7 +47,12 @@ public class UserController {
 		}
 		user.setEnabled(1);
 		user.setPassword(encoder.encode(user.getPassword()));
+		try {
 		user = ur.save(user);
+		} catch(Exception cve) {
+			model.addAttribute("message", "Gebruikersnaam bestaat al");
+			return user();
+		}
 		UserRole userRole = new UserRole();
 		userRole.setUser(user);
 		userRole.setRole("ROLE_USER");

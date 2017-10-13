@@ -15,7 +15,7 @@ public class MensErgerJeNiet {
 	private ArrayList<Pawn> pawns = new ArrayList<Pawn>();
 	private int playerIndex = 0;
 	private static GameBoard board = new GameBoard();
-	private int dice;
+	private int dice = 1;
 	private boolean hasThrown;
 	private boolean gameStarted;
 	private boolean finished;
@@ -60,6 +60,9 @@ public class MensErgerJeNiet {
 		if (!hasThrown && !isFinished()) {
 			dice = (int) (Math.random() * 6 + 1);
 			hasThrown = true;
+			if(getCurrentPlayer().getPlayOptions(dice).isEmpty()) {
+				nextTurn();
+			}
 		}
 		return dice;
 	}
@@ -99,5 +102,13 @@ public class MensErgerJeNiet {
 	
 	public boolean isFinished() {
 		return finished;
+	}
+	
+	public int getPlayerIndex() {
+		return playerIndex;
+	}
+	
+	public int getDice() {
+		return dice;
 	}
  }
