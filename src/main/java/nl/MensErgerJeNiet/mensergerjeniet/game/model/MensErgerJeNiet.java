@@ -28,6 +28,7 @@ public class MensErgerJeNiet {
 	public void addUser(String name) {
 		addPlayer(new HumanPlayer(name, (players.size() + 1) * 10, board));
 	}
+	
 
 	public void addBot(String name) {
 		addPlayer(new ComputerPlayer(name, (players.size() + 1) * 10, board));

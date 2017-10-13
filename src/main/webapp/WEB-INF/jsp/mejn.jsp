@@ -85,14 +85,14 @@ $scope.startGame = function() {
 	
 };
 $scope.throwEffect = function(dice, pid) {
-	for(var i = 0; i < 10; ++ i) {
+	for(var i = 0; i < 9; ++ i) {
 		setTimeout(function() {
 			document.getElementById("dice").href.baseVal = "img/"+((~~(Math.random()*6))+1)+".png";
 		}, i*50);
 	}
 	setTimeout(function() {
-	document.getElementById("dice").href.baseVal = "img/"+dice+".png";
-	}, 550);
+		$scope.changeDice(dice,pid);
+	}, 500);
 };
 $scope.throwDice = function() {
     if(stompClient) {
@@ -146,10 +146,11 @@ $scope.throwDice = function() {
 	        }
 	        if(total.action == "throw") {
 	        	$scope.throwEffect(total.dice, total.pid);
+	        } else {
+	        	$scope.changeDice(total.dice, total.pid);
 	        }
+	        
 
-	        document.getElementById("dicebg").style.fill = $scope.colours[total.pid]
-	        document.getElementById("dicebg").style.stroke = $scope.colours[total.pid];
 	        document.getElementById("start").style.display = "none";
 	        $scope.$apply();
 	        //data[{id, location, index},{..},{..}]
