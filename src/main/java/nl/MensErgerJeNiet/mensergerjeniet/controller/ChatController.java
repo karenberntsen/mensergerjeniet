@@ -78,7 +78,7 @@ public class ChatController {
 		}
 		builder.append("]");
 		return builder.toString();
-	}
+	} 
 
 	private String getContentString(int dice, int playerIndex, int[] options, String lastAction) {
 		StringBuilder builder = new StringBuilder();
@@ -86,6 +86,7 @@ public class ChatController {
 		append(", \"pid\": ").append(playerIndex).
 		append(", \"action\": \"").append(lastAction).
 		append("\", \"pawns\": ").append(pawnPosContent()).
+		append(", \"players\": ").append(playerNameList()).
 		append(" , \"options\": [");
 		for(int i = 0; i < options.length; ++i) {
 			builder.append(options[i]);
@@ -96,6 +97,22 @@ public class ChatController {
 		builder.append("]}");
 		return builder.toString();
 	}
+
+	private String playerNameList() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("[");
+		ArrayList<String> list = mejn.getPlayerNames();
+		for(int i =0; i < list.size(); ++i) {
+			builder.append("\"").append(list.get(i)).append("\"");
+			if(i < list.size()-1) {
+				builder.append(", ");
+			}
+		}
+		builder.append("]");
+		
+		return builder.toString();
+	}
+
 
 	@MessageMapping("/chat.sendMessage")
 	@SendTo("/channel/public")
@@ -117,12 +134,6 @@ public class ChatController {
 		CustomUserDetails details = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication()
 				.getPrincipal();
 		model.addAttribute("username", details.getUsername());
-		return "chat";
-	}
-
-	@RequestMapping("/chattest")
-	public String testChatPage(ModelMap model) {
-		model.addAttribute("username", "TEST ACCOUNT");
 		return "chat";
 	}
 

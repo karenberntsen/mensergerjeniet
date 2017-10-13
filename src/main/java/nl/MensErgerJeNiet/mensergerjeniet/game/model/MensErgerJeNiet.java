@@ -37,6 +37,7 @@ public class MensErgerJeNiet {
 	private void addPlayer(Player player) {
 		if (gameStarted) return;
 		if (players.size() > 3) return;
+		if(getPlayerNames().contains(player.getName())) return;
 		players.add(player);
 		pawns.addAll(player.getPawns());
 	}
@@ -70,7 +71,7 @@ public class MensErgerJeNiet {
 	}
 	
 	public int[] getPlayOptions() {
-		if(finished || !gameStarted) return new int[0];
+		if(finished || !gameStarted || !hasThrown) return new int[0];
 		ArrayList<Pawn> playOptions =getCurrentPlayer().getPlayOptions(dice);
 		int[] options = new int[playOptions.size()];
 		for(int i = 0; i < playOptions.size(); ++i) {
@@ -112,5 +113,13 @@ public class MensErgerJeNiet {
 	
 	public int getDice() {
 		return dice;
+	}
+	
+	public ArrayList<String> getPlayerNames() {
+		ArrayList<String> names = new ArrayList<>();
+		for(Player p: players) {
+			names.add(p.getName());
+		}
+		return names;
 	}
  }

@@ -22,7 +22,6 @@ var app = angular.module('myApp', [])
   $scope.greenCircles=[{"x": 9, "y": 9}, {"x": 10, "y": 9}, {"x": 9, "y": 10}, {"x": 10, "y": 10}, {"x": 9, "y": 5}, {"x": 8, "y": 5}, {"x": 7, "y": 5}, {"x": 6, "y": 5}, {"x": 10, "y": 6}];
   $scope.yellowCircles=[{"x": 0, "y": 9}, {"x": 1, "y": 9}, {"x": 0, "y": 10}, {"x": 1, "y": 10}, {"x": 5, "y": 9}, {"x": 5, "y": 8}, {"x": 5, "y": 7}, {"x": 5, "y": 6}, {"x": 4, "y": 10}];
   $scope.redCircles=[{"x": 0, "y": 0}, {"x": 1, "y": 0}, {"x": 0, "y": 1}, {"x": 1, "y": 1}, {"x": 1, "y": 5}, {"x": 2, "y": 5}, {"x": 3, "y": 5}, {"x": 4, "y": 5}, {"x": 0, "y": 4}];
-  $scope.colours= ["#668cff","#85e085","#ffffb3","#ff9999"];
   $scope.home=[{"x": 9, "y": 0}, {"x": 10, "y": 0}, {"x": 9, "y":  1}, {"x": 10, "y":  1},
 	  		   {"x": 9, "y": 9}, {"x": 10, "y": 9}, {"x": 9, "y": 10}, {"x": 10, "y": 10},
 	  		   {"x": 0, "y": 9}, {"x":  1, "y": 9}, {"x": 0, "y": 10}, {"x":  1, "y": 10},
@@ -44,7 +43,9 @@ var app = angular.module('myApp', [])
   $scope.redCircles.Start={"x": 0, "y": 4};
   $scope.redCircles.Finish=[{"x": 1, "y": 5}, {"x": 2, "y": 5}, {"x": 3, "y": 5}, {"x": 4, "y": 5}];
 		  
-		  
+  $scope.playerNames = ["test","test2","test3","test4" ];
+  $scope.colours= ["#668cff","#85e085","#ffffb3","#ff9999"];
+  $scope.optcolours= ["cyan","lime","khaki","orange"];
   $scope.boardBorder=7;
   $scope.circleRadius=3;
   $scope.pawnRadius=2;
@@ -52,6 +53,8 @@ var app = angular.module('myApp', [])
   $scope.circleCoordinates=[];
   $scope.circleCoordinates[0]=$scope.boardBorder;
   $scope.dobbel="een";
+  
+  $scope.options = [];
   for(var i=1;i<11;i++) {
 		$scope.circleCoordinates[i]= $scope.circleCoordinates[i-1]+$scope.circleRadius*2+$scope.circleDistance;
   }
@@ -94,6 +97,16 @@ $scope.throwEffect = function(dice, pid) {
 		$scope.changeDice(dice,pid);
 	}, 500);
 };
+
+$scope.flashOptions = function() {
+	for(var i =0; i < $scope.pawns.length; ++i) {
+		$scope.pawns[i].colour = $scope.colours[~~(i/4)];
+	}
+	for(var i =0; i <$scope.options.length; ++i) {
+		$scope.pawns[$scope.options[i]].colour = $scope.optcolours[~~($scope.options[i]/4)];
+	}
+	
+}
 $scope.throwDice = function() {
     if(stompClient) {
         var chatMessage = {
@@ -128,6 +141,9 @@ $scope.throwDice = function() {
 	        var total = JSON.parse(message.content);
 	        var data  = total.pawns;
 	        var pawns = $scope.pawns;
+	        var players = total.players;
+	        $scope.options = total.options;
+	        $scope.flashOptions();
 	        for(var i =0; i < data.length; ++i) {
 	        	var pawn = pawns[data[i].id];
 	        	var index = data[i].index;
@@ -143,6 +159,10 @@ $scope.throwDice = function() {
 	        		pawn.y = $scope.finish[(~~(i/4)*4) + index].y;
 	        	}
 	        	
+	        }
+	        
+	        for(var i =0; i < players.length; ++i) {
+	        	$scope.playerNames[i] = players[i];
 	        }
 	        if(total.action == "throw") {
 	        	$scope.throwEffect(total.dice, total.pid);
@@ -226,6 +246,9 @@ $scope.conn();
 <div  ng-controller="myCtrl" > 
 
 	<svg style=width:100vmin;height:100vmin;position:fixed;top:0;left:0;bottom:0;right:0; xmlns="http://www.w3.org/2000/svg">
+			<text ng-repeat="name in playerNames" ng-attr-x="{{circleCoordinates[$index]}}%" ng-attr-y="{{circleCoordinates[$index]}}%" text-anchor="middle" stroke="black" stroke-width="2px" >{{name}}</text>
+			
+			
 			<circle ng-repeat="indices in whiteCircles" ng-attr-cx="{{circleCoordinates[indices.x]}}%" ng-attr-cy="{{circleCoordinates[indices.y]}}%" ng-attr-r="{{circleRadius}}%" stroke="black" stroke-width="1" fill="white" />
 			<circle ng-repeat="indices in blueCircles" ng-attr-cx="{{circleCoordinates[indices.x]}}%" ng-attr-cy="{{circleCoordinates[indices.y]}}%" ng-attr-r="{{circleRadius}}%" stroke="black" stroke-width="1" fill="blue" />
 			<circle ng-repeat="indices in greenCircles" ng-attr-cx="{{circleCoordinates[indices.x]}}%" ng-attr-cy="{{circleCoordinates[indices.y]}}%" ng-attr-r="{{circleRadius}}%" stroke="black" stroke-width="1" fill="green" />

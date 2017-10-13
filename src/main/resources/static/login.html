@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Spring Security Example</title>
+</head>
+<body class="security-app">
+	<link rel="stylesheet" href="/css/bootstrap.min.css"
+		integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M"
+		crossorigin="anonymous">
+
+	<style>
+.errormessage {
+	color: red;
+}
+
+body {
+	height: 1080px;
+	border: 20px solid;
+	border-image: linear-gradient(to left, rgba(78, 137, 176, 1) 1%,
+		rgba(115, 192, 85, 1) 100%);
+	border-image-slice: 1;
+	background: linear-gradient(to left, rgba(78, 137, 176, 1) 1%,
+		rgba(115, 192, 85, 1) 100%);
+}
+</style>
+	<nav class="navbar navbar-expand-lg navbar-light bg-light">
+		<button class="navbar-toggler" type="button" data-toggle="collapse"
+			data-target="#navbarSupportedContent"
+			aria-controls="navbarSupportedContent" aria-expanded="false"
+			aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+
+		<div class="collapse navbar-collapse" id="navbarSupportedContent">
+			<ul class="navbar-nav mr-auto">
+				<li class="nav-item active"><a class="nav-link " href="/">Home</a>
+				</li>
+				<li class="nav-item active"><a class="nav-link" href="/login.html">Login</a>
+				</li>
+				<li class="nav-item active"><a class="nav-link" href="/register.html">New
+						user</a></li>
+				<li class="nav-item active"><a class="nav-link"
+					href="/mejn.html">Mejn</a></li>
+			</ul>
+		</div>
+	</nav>
+	<h2>Login</h2>
+	<form action="/login" method="post">
+
+		<div class="lc-block">
+			<div>
+				<input type="text" class="style-4" name="username"
+					placeholder="User Name" />
+			</div>
+			<div>
+				<input type="password" class="style-4" name="password"
+					placeholder="Password" />
+			</div>
+			<div>
+				<input type="submit" value="Sign In" class="button red small" />
+			</div>
+			<c:if test="${param.error ne null}">
+				<div class="alert-danger">Invalid username and password.</div>
+			</c:if>
+			<c:if test="${param.logout ne null}">
+				<div class="alert-normal">You have been logged out.</div>
+			</c:if>
+		</div>
+		<input type="hidden" name="${_csrf.parameterName}"
+			value="${_csrf.token}" />
+	</form>
+
+	       <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="/js/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="/js/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+    <script src="/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+     
+</body>
+</html>

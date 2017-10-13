@@ -8,6 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -20,19 +21,19 @@ import nl.MensErgerJeNiet.mensergerjeniet.db.model.repositories.UserRolesReposit
 @Controller
 public class UserController {
 	@Autowired
-	UserRepository ur;
+	UserRepository userRepository;
 	@Autowired
-	UserRolesRepository urr;
+	UserRolesRepository userRolesRepository;
 	@Autowired
 	PasswordEncoder encoder;
 
-	@RequestMapping(value = "/addUser", method = RequestMethod.GET)
 	public ModelAndView user() {
 		return new ModelAndView("user", "command", new User());
 	}
 
-	@RequestMapping(value = "/addUser", method = RequestMethod.POST)
+	@PostMapping("/addUser")
 	public ModelAndView adduser(@ModelAttribute("SSO") User user, ModelMap model) throws NoSuchAlgorithmException {
+		System.out.println("new user?");
 		user.setEmail(user.getEmail().toLowerCase());
 		if (!user.getEmail().matches(
 				"(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])")) {
@@ -48,7 +49,7 @@ public class UserController {
 		user.setEnabled(1);
 		user.setPassword(encoder.encode(user.getPassword()));
 		try {
-		user = ur.save(user);
+		user = userRepository.save(user);
 		} catch(Exception cve) {
 			model.addAttribute("message", "Gebruikersnaam bestaat al");
 			return user();
@@ -56,7 +57,7 @@ public class UserController {
 		UserRole userRole = new UserRole();
 		userRole.setUser(user);
 		userRole.setRole("ROLE_USER");
-		urr.save(userRole);
+		userRolesRepository.save(userRole);
 		return new ModelAndView("home");
 	}
 

@@ -14,7 +14,6 @@ public class WebSocketSecurityConfig
     
     @Override
 	protected boolean sameOriginDisabled() {
-		//disable CSRF for websockets for now...
 		return true;
 	}
 }

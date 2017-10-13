@@ -28,17 +28,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
  
  @Override
  protected void configure(HttpSecurity http) throws Exception {
-//	 http.authorizeRequests().antMatchers("/**").permitAll();
    http.authorizeRequests()
-   .antMatchers("/newUser","/chattest").permitAll()
-   .antMatchers("/chat","/mejn").access("hasRole('ROLE_USER')")
-   .antMatchers("/hello").access("hasRole('ROLE_ADMIN')")
+   .antMatchers("/", "/login", "/addUser", "/newUser",  			// pagina's die iedereen mag gebruiken
+		   		"/css/*", "/js/*", "/img/*").permitAll()			// css, js, img mag iedereen bij
+   .antMatchers("/chat","/mejn").access("hasRole('ROLE_USER')") 	// users mogen bij deze pagina's
+   .antMatchers("/hello").access("hasRole('ROLE_ADMIN')")			// admin page test
+   .antMatchers("/**").authenticated()								// ingelogde gebruikers mogen alle urls gebruiken
    .anyRequest().permitAll()
    .and()
-    .formLogin().loginPage("/login")
+    .formLogin().loginPage("/login.html")
     .usernameParameter("username").passwordParameter("password")
   .and()
-    .logout().logoutSuccessUrl("/login?logout") 
+    .logout().logoutSuccessUrl("/login.html?logout") 
    .and()
    .exceptionHandling().accessDeniedPage("/403")
   .and()
