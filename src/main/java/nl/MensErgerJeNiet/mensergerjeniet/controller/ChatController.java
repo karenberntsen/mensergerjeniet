@@ -38,25 +38,27 @@ public class ChatController {
 		message.setSender(SecurityContextHolder.getContext().getAuthentication().getName());
 		if (message.getContent().equals("start")) { // iedereen kan het spel starten
 			mejn.startGame();
-			sendDataMessage(message);
-		}else if (SecurityContextHolder.getContext().getAuthentication().getName()
-				.equals(mejn.getCurrentPlayer().getName())) { // alleen de speler die aan de beurt is mag acties uitvoeren
+			sendDataMessage(message, "start");
+		}else if (SecurityContextHolder.getContext().getAuthentication().getName().equals(mejn.getCurrentPlayer().getName())) { // alleen de speler die aan de beurt is mag acties uitvoeren
+			String lastAction = "";
 			if (message.getContent().equals("throw")) {
 				mejn.throwDice();
+				lastAction = "throw";
 			} else if (message.getContent().startsWith("pion")) {
 				mejn.doOption(Integer.parseInt(message.getContent().split("pion")[1].trim()));
+				lastAction = "move";
 			}
-			sendDataMessage(message);
+			sendDataMessage(message, lastAction);
 		}
 	}
 		
-
-	private void sendDataMessage(ChatMessage message) {
+	
+	private void sendDataMessage(ChatMessage message, String lastAction) {
 		int dice = mejn.getDice();
 		int playerIndex = mejn.getPlayerIndex();
 		int[] options = mejn.getPlayOptions();
 		message.setType(MessageType.GAME_OPTIONS);
-		message.setContent(getContentString(dice, playerIndex, options));
+		message.setContent(getContentString(dice, playerIndex, options, lastAction));
 		
 	}
 
@@ -78,11 +80,12 @@ public class ChatController {
 		return builder.toString();
 	}
 
-	private String getContentString(int dice, int playerIndex, int[] options) {
+	private String getContentString(int dice, int playerIndex, int[] options, String lastAction) {
 		StringBuilder builder = new StringBuilder();
 		builder.append("{ \"dice\":").append(dice).
 		append(", \"pid\": ").append(playerIndex).
-		append(", \"pawns\": ").append(pawnPosContent()).
+		append(", \"action\": \"").append(lastAction).
+		append("\", \"pawns\": ").append(pawnPosContent()).
 		append(" , \"options\": [");
 		for(int i = 0; i < options.length; ++i) {
 			builder.append(options[i]);

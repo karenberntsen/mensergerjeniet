@@ -95,7 +95,16 @@ $scope.throwDice = function() {
         stompClient.send("/app/chat.sendMessage", {}, JSON.stringify(chatMessage));
     }
     event.preventDefault();
-}
+};
+
+$scope.throwEffect = function() {
+	var imgVal =  document.getElementById("dice").href.baseVal;
+	for(var i = 0; i < 250000; ++i) {
+		
+        imgVal = "img/"+(~~(Math.random()*6)+1)+".png";
+		
+	}
+};
   
   $scope.onMessageReceived = function(payload) {
 	    var message = JSON.parse(payload.body);
@@ -130,7 +139,7 @@ $scope.throwDice = function() {
 	        	}
 	        	
 	        }
-
+			$scope.throwEffect();
 	        document.getElementById("dice").href.baseVal = "img/"+total.dice+".png";
 	        document.getElementById("dicebg").style.fill = $scope.colours[total.pid]
 	        document.getElementById("dicebg").style.stroke = $scope.colours[total.pid];

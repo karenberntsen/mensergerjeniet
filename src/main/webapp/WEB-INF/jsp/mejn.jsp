@@ -5,7 +5,7 @@
 
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>Mens erger je niet - The Game</title>
 </head>
 <body>
 
@@ -22,7 +22,7 @@ var app = angular.module('myApp', [])
   $scope.greenCircles=[{"x": 9, "y": 9}, {"x": 10, "y": 9}, {"x": 9, "y": 10}, {"x": 10, "y": 10}, {"x": 9, "y": 5}, {"x": 8, "y": 5}, {"x": 7, "y": 5}, {"x": 6, "y": 5}, {"x": 10, "y": 6}];
   $scope.yellowCircles=[{"x": 0, "y": 9}, {"x": 1, "y": 9}, {"x": 0, "y": 10}, {"x": 1, "y": 10}, {"x": 5, "y": 9}, {"x": 5, "y": 8}, {"x": 5, "y": 7}, {"x": 5, "y": 6}, {"x": 4, "y": 10}];
   $scope.redCircles=[{"x": 0, "y": 0}, {"x": 1, "y": 0}, {"x": 0, "y": 1}, {"x": 1, "y": 1}, {"x": 1, "y": 5}, {"x": 2, "y": 5}, {"x": 3, "y": 5}, {"x": 4, "y": 5}, {"x": 0, "y": 4}];
-  $scope.colours= ["blue","green","yellow","red"];
+  $scope.colours= ["#668cff","#85e085","#ffffb3","#ff9999"];
   $scope.home=[{"x": 9, "y": 0}, {"x": 10, "y": 0}, {"x": 9, "y":  1}, {"x": 10, "y":  1},
 	  		   {"x": 9, "y": 9}, {"x": 10, "y": 9}, {"x": 9, "y": 10}, {"x": 10, "y": 10},
 	  		   {"x": 0, "y": 9}, {"x":  1, "y": 9}, {"x": 0, "y": 10}, {"x":  1, "y": 10},
@@ -84,7 +84,16 @@ $scope.startGame = function() {
 	    event.preventDefault();
 	
 };
-  
+$scope.throwEffect = function(dice, pid) {
+	for(var i = 0; i < 10; ++ i) {
+		setTimeout(function() {
+			document.getElementById("dice").href.baseVal = "img/"+((~~(Math.random()*6))+1)+".png";
+		}, i*50);
+	}
+	setTimeout(function() {
+	document.getElementById("dice").href.baseVal = "img/"+dice+".png";
+	}, 550);
+};
 $scope.throwDice = function() {
     if(stompClient) {
         var chatMessage = {
@@ -95,8 +104,13 @@ $scope.throwDice = function() {
         stompClient.send("/app/chat.sendMessage", {}, JSON.stringify(chatMessage));
     }
     event.preventDefault();
-}
+};
   
+ $scope.changeDice = function(dice, pid) {
+	 document.getElementById("dice").href.baseVal = "img/"+dice+".png";
+     document.getElementById("dicebg").style.fill = $scope.colours[pid]
+     document.getElementById("dicebg").style.stroke = $scope.colours[pid];
+ }
   $scope.onMessageReceived = function(payload) {
 	    var message = JSON.parse(payload.body);
 
@@ -108,10 +122,11 @@ $scope.throwDice = function() {
 	    } else if (message.type === 'LEAVE') {
 	        messageElement.classList.add('event-message');
 	        message.content = message.sender + ' left!';
-	    }else if (message.type === 'GAME_START') {
+	    }else if (message.type === 'GAME_OPTIONS') {
 	        messageElement.classList.add('event-message');
 	        
-	        var data = JSON.parse(message.content);
+	        var total = JSON.parse(message.content);
+	        var data  = total.pawns;
 	        var pawns = $scope.pawns;
 	        for(var i =0; i < data.length; ++i) {
 	        	var pawn = pawns[data[i].id];
@@ -124,20 +139,20 @@ $scope.throwDice = function() {
 	        		pawn.x = $scope.whiteCircles[index].x;
 	        		pawn.y = $scope.whiteCircles[index].y;
 	        	} else if(data[i].location == "hok") {
-	        		pawn.x = $scope.finish[~~(i/4) + index].x;
-	        		pawn.y = $scope.finish[~~(i/4) + index].y;
+	        		pawn.x = $scope.finish[(~~(i/4)*4) + index].x;
+	        		pawn.y = $scope.finish[(~~(i/4)*4) + index].y;
 	        	}
 	        	
 	        }
+	        if(total.action == "throw") {
+	        	$scope.throwEffect(total.dice, total.pid);
+	        }
+
+	        document.getElementById("dicebg").style.fill = $scope.colours[total.pid]
+	        document.getElementById("dicebg").style.stroke = $scope.colours[total.pid];
+	        document.getElementById("start").style.display = "none";
 	        $scope.$apply();
 	        //data[{id, location, index},{..},{..}]
-	    }else if (message.type === 'GAME_OPTIONS') {
-	        messageElement.classList.add('event-message');
-	        
-	        var data = JSON.parse(message.content);
-	        document.getElementById("dice").href.baseVal = "img/"+data.dice+".png";
-	        //data.dice , data.options
-	        //TODO game stuff
 	    } else {
 	        messageElement.classList.add('chat-message');
 
@@ -215,17 +230,17 @@ $scope.conn();
 			<circle ng-repeat="indices in greenCircles" ng-attr-cx="{{circleCoordinates[indices.x]}}%" ng-attr-cy="{{circleCoordinates[indices.y]}}%" ng-attr-r="{{circleRadius}}%" stroke="black" stroke-width="1" fill="green" />
 			<circle ng-repeat="indices in yellowCircles" ng-attr-cx="{{circleCoordinates[indices.x]}}%" ng-attr-cy="{{circleCoordinates[indices.y]}}%" ng-attr-r="{{circleRadius}}%" stroke="black" stroke-width="1" fill="yellow" />
 			<circle ng-repeat="indices in redCircles" ng-attr-cx="{{circleCoordinates[indices.x]}}%" ng-attr-cy="{{circleCoordinates[indices.y]}}%" ng-attr-r="{{circleRadius}}%" stroke="black" stroke-width="1" fill="red" />		
-		    <image id="dice" ng-click="throwDice()" xlink:href="img/1.png" ng-attr-x="{{circleCoordinates[5]-circleRadius}}%" ng-attr-y="{{circleCoordinates[5]-circleRadius}}%" height="{{2*circleRadius}}%" width="{{2*circleRadius}}%"/>
-			<g ng-repeat="pawn in pawns" ng-attr-cx="{{circleCoordinates[pawn.x]}}%" ng-attr-cy="{{circleCoordinates[pawn.y]}}%" >
-				<circle  id="{{pawn.id}}" ng-click="movePawn(pawn.id)" ng-attr-r="{{pawnRadius}}%" stroke="black" stroke-width="1" fill="{{pawn.colour}}">
+		    
+			<g ng-repeat="pawn in pawns" ng-attr-x="{{circleCoordinates[pawn.x]}}%" ng-attr-y="{{circleCoordinates[pawn.y]}}%" ng-click="movePawn(pawn.id)">
+				<circle  id="{{pawn.id}}" ng-attr-cx="{{circleCoordinates[pawn.x]}}%" ng-attr-cy="{{circleCoordinates[pawn.y]}}%"  ng-attr-r="{{pawnRadius}}%" stroke="black" stroke-width="1" fill="{{pawn.colour}}">
 				</circle>
-				<text text-anchor="middle" stroke="#51c5cf" stroke-width="2px" dy=".3em">{{pawn.id}}</text>
+				<text ng-attr-x="{{circleCoordinates[pawn.x] + 0.1}}%" ng-attr-y="{{circleCoordinates[pawn.y] + 0.8}}%" text-anchor="middle" stroke="black" stroke-width="2px" >{{pawn.id}}</text>
 			</g>
-			<!-- <circle id="red1.pawn" ng-click="movePawn()" ng-attr-cx="{{circleCoordinates[pawns[12].x]}}%" ng-attr-cy="{{circleCoordinates[pawns[12].y]}}%" ng-attr-r="{{pawnRadius}}%" stroke="black" stroke-width="1" fill="{{pawns[12].colour}}" />
-			<circle id="red2.pawn" ng-click="movePawn()" ng-attr-cx="{{circleCoordinates[pawns[13].x]}}%" ng-attr-cy="{{circleCoordinates[pawns[13].y]}}%" ng-attr-r="{{pawnRadius}}%" stroke="black" stroke-width="1" fill="{{pawns[12].colour}}" />
-			<circle id="red3.pawn" ng-click="movePawn()" ng-attr-cx="{{circleCoordinates[pawns[14].x]}}%" ng-attr-cy="{{circleCoordinates[pawns[14].y]}}%" ng-attr-r="{{pawnRadius}}%" stroke="black" stroke-width="1" fill="{{pawns[12].colour}}" />
-			<circle id="red4.pawn" ng-click="movePawn()" ng-attr-cx="{{circleCoordinates[pawns[15].x]}}%" ng-attr-cy="{{circleCoordinates[pawns[15].y]}}%" ng-attr-r="{{pawnRadius}}%" stroke="black" stroke-width="1" fill="{{pawns[12].colour}}" />
-	-->
+			<g >
+				<rect  id="dicebg" ng-attr-x="{{circleCoordinates[5]-circleRadius}}%" ng-attr-y="{{circleCoordinates[5]-circleRadius}}%" height="{{2*circleRadius}}%" width="{{2*circleRadius}}%" fill = "#668cff" stroke =  "#668cff"> </rect>
+				<image id="dice" ng-click="throwDice()" xlink:href="img/1.png" ng-attr-x="{{circleCoordinates[5]-circleRadius}}%" ng-attr-y="{{circleCoordinates[5]-circleRadius}}%" height="{{2*circleRadius}}%" width="{{2*circleRadius}}%"/>
+			
+			</g>
 	 <image id="start" ng-click="startGame()" xlink:href="img/start_button.png" ng-attr-x="30%" ng-attr-y="80%" height="{{5*circleRadius}}%" width="{{10*circleRadius}}%"/>
 			
 	</svg>

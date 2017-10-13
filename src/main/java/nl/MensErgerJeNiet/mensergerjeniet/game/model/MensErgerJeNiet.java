@@ -1,6 +1,7 @@
 package nl.MensErgerJeNiet.mensergerjeniet.game.model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Deze klasse representeert het Mens Erger Je Niet spel. Het bestaat uit het
