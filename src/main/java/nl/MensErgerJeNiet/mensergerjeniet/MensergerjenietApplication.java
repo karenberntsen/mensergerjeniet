@@ -9,4 +9,3 @@ public class MensergerjenietApplication {
 		SpringApplication.run(MensergerjenietApplication.class, args);
 	}
 }
-

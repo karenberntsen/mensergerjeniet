@@ -1,6 +1,7 @@
 package nl.MensErgerJeNiet.mensergerjeniet.controller;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
@@ -19,8 +20,14 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import nl.MensErgerJeNiet.mensergerjeniet.config.security.CustomUserDetails;
 import nl.MensErgerJeNiet.mensergerjeniet.controller.ChatMessage.MessageType;
+import nl.MensErgerJeNiet.mensergerjeniet.db.model.Game;
+import nl.MensErgerJeNiet.mensergerjeniet.db.model.Statistics;
+import nl.MensErgerJeNiet.mensergerjeniet.db.model.repositories.GameRepository;
+import nl.MensErgerJeNiet.mensergerjeniet.db.model.repositories.StatisticsRepository;
+import nl.MensErgerJeNiet.mensergerjeniet.db.model.repositories.UserRepository;
 import nl.MensErgerJeNiet.mensergerjeniet.game.model.MensErgerJeNiet;
 import nl.MensErgerJeNiet.mensergerjeniet.game.model.Pawn;
+
 
 /**
  * Created by rajeevkumarsingh on 24/07/17.
@@ -30,10 +37,44 @@ public class ChatController {
 
 	private MensErgerJeNiet mejn = new MensErgerJeNiet();
 
+	@Autowired
+	UserRepository userRepository;
+	
+	@Autowired
+	GameRepository gameRepository;
+	
+	
+//	@Autowired
+//	StatisticsRepository statisticsRepository;
+	
 	public void botReplys(ChatMessage message) {
 		if (!message.getType().equals(ChatMessage.MessageType.GAME))
 			return;
-		if(mejn.isFinished()) return;
+		if(mejn.isFinished()) {
+			Game game = new Game();
+			game.setTurns(mejn.getRounds());
+			game.setWinner(userRepository.findByUserName(mejn.getCurrentPlayer().getName()));
+			gameRepository.save(game);
+			List<String> usernames = mejn.getPlayerNames();
+			for(String name : usernames) {
+//				Statistics s = statisticsRepository.findStatisticsByUsername(name);
+//				if(s== null) {
+//					s = new Statistics();
+//					s.setUser(userRepository.findByUserName(name));
+//					if(game.getWinner().getUserName().equals(name)) {
+//						s.setWin(s.getWin()+1);
+//					} else {
+//						s.setLoss(s.getLoss()+1);
+//					}
+//					statisticsRepository.save(s);
+//				}
+			}
+			//TODO Statistics +1 aantal spellen alle meespelende spelers & +1 wins voor winnende speler (nieuwe statistics aanmaken voor nieuwe spelers)
+			//nieuwe game met aantal beurten + winnende speler
+			
+			mejn = new MensErgerJeNiet();//reset spel
+			return;
+		}
 		
 		message.setSender(SecurityContextHolder.getContext().getAuthentication().getName());
 		if (message.getContent().equals("start")) { // iedereen kan het spel starten

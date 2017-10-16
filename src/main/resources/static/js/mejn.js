@@ -30,7 +30,6 @@ var app = angular.module('myApp', [])
   $scope.redCircles.Start={"x": 0, "y": 4};
   $scope.redCircles.Finish=[{"x": 1, "y": 5}, {"x": 2, "y": 5}, {"x": 3, "y": 5}, {"x": 4, "y": 5}];
 		  
-  $scope.playerNames = ["test","test2","test3","test4" ];
   $scope.colours= ["#668cff","#85e085","#ffffb3","#ff9999"];
   $scope.optcolours= ["cyan","lime","khaki","orange"];
   $scope.boardBorder=7;
@@ -40,7 +39,8 @@ var app = angular.module('myApp', [])
   $scope.circleCoordinates=[];
   $scope.circleCoordinates[0]=$scope.boardBorder;
   $scope.dobbel="een";
-  
+
+  $scope.playerNames = [{"name": "test","x": 9, "y": 0}, {"name": "test2", "x": 9, "y": 9}, {"name": "test3", "x": 0, "y": 9}, {"name": "test4", "x": 0, "y": 0} ];
   $scope.options = [];
   for(var i=1;i<11;i++) {
 		$scope.circleCoordinates[i]= $scope.circleCoordinates[i-1]+$scope.circleRadius*2+$scope.circleDistance;
@@ -149,7 +149,7 @@ $scope.throwDice = function() {
 	        }
 	        
 	        for(var i =0; i < players.length; ++i) {
-	        	$scope.playerNames[i] = players[i];
+	        	$scope.playerNames[i].name = players[i];
 	        }
 	        if(total.action == "throw") {
 	        	$scope.throwEffect(total.dice, total.pid);

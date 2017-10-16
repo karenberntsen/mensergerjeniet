@@ -23,6 +23,7 @@
     <div class="form-group row">
     <form:label path = "password" for="exampleInputPassword1" class="col-sm-2 col-form-label">Password</form:label>
     <form:input path = "password" type="password" class="form-control col-sm-4" id="exampleInputPassword1" placeholder="Password"/>
+  <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
   <button type="submit" class="btn btn-primary ml-1">Create</button>
     </div>
 </form:form>

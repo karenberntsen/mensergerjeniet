@@ -29,23 +29,23 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
  @Override
  protected void configure(HttpSecurity http) throws Exception {
    http.authorizeRequests()
-   .antMatchers("/", "/login", "/addUser", "/newUser",  			// pagina's die iedereen mag gebruiken
+   .antMatchers("/", "/register", "/login", "/addUser", 									// pagina's die iedereen mag gebruiken
 		   		"/css/*", "/js/*", "/img/*").permitAll()			// css, js, img mag iedereen bij
    .antMatchers("/chat","/mejn").access("hasRole('ROLE_USER')") 	// users mogen bij deze pagina's
    .antMatchers("/hello").access("hasRole('ROLE_ADMIN')")			// admin page test
    .antMatchers("/**").authenticated()								// ingelogde gebruikers mogen alle urls gebruiken
    .anyRequest().permitAll()
    .and()
-    .formLogin().loginPage("/login.html")
+    .formLogin().loginPage("/login")
     .usernameParameter("username").passwordParameter("password")
   .and()
-    .logout().logoutSuccessUrl("/login.html?logout") 
+    .logout().logoutSuccessUrl("/login?logout") 
    .and()
    .exceptionHandling().accessDeniedPage("/403")
   .and()
-    .csrf();
+    .csrf().disable();
  }
- 
+  
  @Bean(name="passwordEncoder")
     public PasswordEncoder passwordencoder(){
      return new BCryptPasswordEncoder();

@@ -20,6 +20,7 @@ public class MensErgerJeNiet {
 	private boolean hasThrown;
 	private boolean gameStarted;
 	private boolean finished;
+	private int rounds;
 	
 	/**
 	 * Constructor. Het aantal computerspelers en het aantal menselijke spelers is
@@ -53,6 +54,7 @@ public class MensErgerJeNiet {
 	 */
 	public void nextPlayer() {
 		playerIndex = ++playerIndex % players.size();
+		if(playerIndex == 0) ++rounds;
 	}
 
 	public Player getCurrentPlayer() {
@@ -114,7 +116,9 @@ public class MensErgerJeNiet {
 	public int getDice() {
 		return dice;
 	}
-	
+	public int getRounds() {
+		return rounds;
+	}
 	public ArrayList<String> getPlayerNames() {
 		ArrayList<String> names = new ArrayList<>();
 		for(Player p: players) {
