@@ -23,11 +23,10 @@ import nl.MensErgerJeNiet.mensergerjeniet.config.security.CustomUserDetails;
 import nl.MensErgerJeNiet.mensergerjeniet.controller.ChatMessage.MessageType;
 import nl.MensErgerJeNiet.mensergerjeniet.db.model.Game;
 import nl.MensErgerJeNiet.mensergerjeniet.db.model.Statistics;
-import nl.MensErgerJeNiet.mensergerjeniet.db.model.repositories.GameRepository;
-import nl.MensErgerJeNiet.mensergerjeniet.db.model.repositories.StatisticsRepository;
 import nl.MensErgerJeNiet.mensergerjeniet.db.model.repositories.UserRepository;
 import nl.MensErgerJeNiet.mensergerjeniet.db.model.services.GameService;
 import nl.MensErgerJeNiet.mensergerjeniet.db.model.services.StatisticsService;
+import nl.MensErgerJeNiet.mensergerjeniet.db.model.services.UserService;
 import nl.MensErgerJeNiet.mensergerjeniet.game.model.MensErgerJeNiet;
 import nl.MensErgerJeNiet.mensergerjeniet.game.model.Pawn;
 
@@ -41,13 +40,10 @@ public class GameController {
 	private MensErgerJeNiet mejn = new MensErgerJeNiet();
 
 	@Autowired
-	private SimpMessageSendingOperations messagingTemplate;
-	@Autowired
-	UserRepository userRepository;
+	UserService userRepository;
 	
 	@Autowired
 	GameService gameService;
-	
 	
 	@Autowired
 	StatisticsService statService;
@@ -74,9 +70,6 @@ public class GameController {
 					statService.save(s);
 				}
 			}
-			//TODO Statistics +1 aantal spellen alle meespelende spelers & +1 wins voor winnende speler (nieuwe statistics aanmaken voor nieuwe spelers)
-			//nieuwe game met aantal beurten + winnende speler
-			
 			mejn = new MensErgerJeNiet();//reset spel
 			return;
 		}
@@ -97,20 +90,35 @@ public class GameController {
 			sendDataMessage(message, lastAction);
 		}
 	}
-		
 	
 	private void sendDataMessage(ChatMessage message, String lastAction) {
 		int dice = mejn.getDice();
 		int playerIndex = mejn.getPlayerIndex();
 		int[] options = mejn.getPlayOptions();
 		message.setType(MessageType.GAME_OPTIONS);
-		message.setContent(getContentString(dice, playerIndex, options, lastAction));
-		
+		message.setContent(getJSONGameDataBuilder(dice, playerIndex, options, lastAction));
 	}
 
-	private String pawnPosContent() {
+	private String getJSONGameDataBuilder(int dice, int playerIndex, int[] options, String lastAction) {
 		StringBuilder builder = new StringBuilder();
-		
+		builder.append("{ \"dice\":").append(dice).
+		append(", \"pid\": ").append(playerIndex).
+		append(", \"action\": \"").append(lastAction).
+		append("\", \"pawns\": ").append(pawnPosJSONBuilder()).
+		append(", \"players\": ").append(playerNameListBuilder()).
+		append(" , \"options\": [");
+		for(int i = 0; i < options.length; ++i) {
+			builder.append(options[i]);
+			if(i < options.length-1) {
+				builder.append(",");
+			}
+		}
+		builder.append("]}");
+		return builder.toString();
+	}
+	
+	private String pawnPosJSONBuilder() {
+		StringBuilder builder = new StringBuilder();
 		builder.append("[ ");
 		ArrayList<Pawn> pawns = mejn.getPawns();
 		for(int i = 0; i < pawns.size(); ++i) {
@@ -124,27 +132,9 @@ public class GameController {
 		}
 		builder.append("]");
 		return builder.toString();
-	} 
-
-	private String getContentString(int dice, int playerIndex, int[] options, String lastAction) {
-		StringBuilder builder = new StringBuilder();
-		builder.append("{ \"dice\":").append(dice).
-		append(", \"pid\": ").append(playerIndex).
-		append(", \"action\": \"").append(lastAction).
-		append("\", \"pawns\": ").append(pawnPosContent()).
-		append(", \"players\": ").append(playerNameList()).
-		append(" , \"options\": [");
-		for(int i = 0; i < options.length; ++i) {
-			builder.append(options[i]);
-			if(i < options.length-1) {
-				builder.append(",");
-			}
-		}
-		builder.append("]}");
-		return builder.toString();
 	}
 
-	private String playerNameList() {
+	private String playerNameListBuilder() {
 		StringBuilder builder = new StringBuilder();
 		builder.append("[");
 		ArrayList<String> list = mejn.getPlayerNames();
@@ -158,7 +148,6 @@ public class GameController {
 		
 		return builder.toString();
 	}
-
 
 	@MessageMapping("/chat.sendMessage")
 	@SendTo("/channel/public")
@@ -183,15 +172,15 @@ public class GameController {
 		return "chat";
 	}
 
-	public static HttpSession session() {
-		ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-		return attr.getRequest().getSession(true); // true == allow create
-	}
-
 	@GetMapping("/test")
 	public String test() {
 		Statistics s = statService.getStatisticsByUsername("yasper");
 		System.out.println(s.getId());
 		return "test";
+	}
+
+	public static HttpSession session() {
+		ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+		return attr.getRequest().getSession(true); // true == allow create
 	}
 }

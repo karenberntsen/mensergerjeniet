@@ -1,5 +1,7 @@
 package nl.MensErgerJeNiet.mensergerjeniet.db.model.services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,5 +29,9 @@ public class StatisticsService {
 
 	public Statistics save(Statistics s) {
 		return statisticsRepository.save(s);
+	} 
+	
+	public List<Statistics> findAll() {
+		return (List<Statistics>) statisticsRepository.findAll();
 	}
 }

@@ -38,5 +38,4 @@ public class Statistics implements Serializable  {
 	@NotNull
 	@OneToOne
 	private User user;
-
 }

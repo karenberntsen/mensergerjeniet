@@ -12,7 +12,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-
 @Configuration
 @EnableWebMvcSecurity
 @ComponentScan(basePackageClasses = CustomUserDetailsService.class)
@@ -25,11 +24,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
  public void configAuthentication(AuthenticationManagerBuilder auth) throws Exception {    
 	 auth.userDetailsService(userDetailsService).passwordEncoder(passwordencoder());
  } 
- 
+   
  @Override
  protected void configure(HttpSecurity http) throws Exception {
    http.authorizeRequests()
-   .antMatchers("/", "/register", "/login", "/addUser", "/test", 									// pagina's die iedereen mag gebruiken
+   .antMatchers("/", "/register", "/login", "/test","/highscores",	// pagina's die iedereen mag gebruiken
 		   		"/css/*", "/js/*", "/img/*").permitAll()			// css, js, img mag iedereen bij
    .antMatchers("/chat","/mejn").access("hasRole('ROLE_USER')") 	// users mogen bij deze pagina's
    .antMatchers("/hello").access("hasRole('ROLE_ADMIN')")			// admin page test

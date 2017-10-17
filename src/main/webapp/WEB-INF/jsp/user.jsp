@@ -10,7 +10,7 @@
    
       <h2>Create new user</h2>
       <span class='errormessage'>${message}</span>
-   <form:form method = "POST" action = "./addUser">
+   <form:form method = "POST" action = "./register">
    <div class="form-group row">
     <form:label path = "userName" for="exampleInputUsername1" class="col-sm-2 col-form-label">Username</form:label>
     <form:input path = "userName" type="text" class="form-control col-sm-4" id="exampleInputUsername1" placeholder="Enter username" value='${userName}'/>
