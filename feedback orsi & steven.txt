@@ -1,0 +1,169 @@
+//regel 388 de arrays
+//509 zelfde probleem
+//550 ook
+
+//602 functie maken om deze functies aan te roepen voor inladen van pagina?
+
+function dataLoader() {
+	ListProjects();
+	ListSamples();
+	ListExperiment();
+	ListSubSamples();
+}
+dataLoader(); in document.onready oid zetten
+
+//verder alles javascript in .js gooien en dan met <script src="/js/scriptfilenaam.js" oid in de pagina zetten
+
+
+//vb:
+
+document.getElementById("ExperimentByNameTable").innerHTML = ""; uit de onreadystatechange callback en in de functie die wat met de innerhtml doet zetten
+    function ExperimentByNameToTable(experiments) {
+		var id = document.getElementById("ProjectID").value;
+		document.getElementById("ExperimentByNameTable").innerHTML = document
+				.getElementById("ExperimentByNameTable").innerHTML
+				+ "<Table><tr><th>ID</th><th>Name</th><th>Description</th><th>Project ID</th></tr>";
+		for (i = 0; i < experiments.length; i++) {
+			document.getElementById("ExperimentByNameTable").innerHTML = document
+					.getElementById("ExperimentByNameTable").innerHTML
+					+ "<tr><td>"
+					+ experiments[i][0]
+					+ "</td><td>"
+					+ experiments[i][1]
+					+ "</td><td>"
+					+ experiments[i][2]
+					+ "</td><td>" + experiments[i][3].id;
+			+"</td></tr>"
+		}
+		document.getElementById("ExperimentByNameTable").innerHTML = document
+				.getElementById("ExperimentByNameTable").innerHTML
+				+ "</table>";
+	}
+	
+	function ExperimentByNameToTable(experiments) {
+		var id = document.getElementById("ProjectID").value;
+		var innerHtml = document.getElementById("ExperimentByNameTable").innerHTML;
+		innerHTML = ""; //of in de regel hieronder de += naar = veranderen
+		innerHtml += "<Table><tr><th>ID</th><th>Name</th><th>Description</th><th>Project ID</th></tr>";
+		for (i = 0; i < experiments.length; i++) {
+			innerHtml += "<tr><td>"
+					+ experiments[i][0]
+					+ "</td><td>"
+					+ experiments[i][1]
+					+ "</td><td>"
+					+ experiments[i][2]
+					+ "</td><td>" + experiments[i][3].id;
+			+"</td></tr>"
+		}
+		innerHtml += "</table>";
+	}
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+//veel xhttp requests, functie maken waarbij je de data, de url en de callback kan meegeven?
+//geeft betere scheiding tussen wat je stuurt en de response.
+
+
+function AddnewSubSampleToSample() {
+	var name = document.getElementById("SubSampleName").value;
+		var id = document.getElementById("deleteSamplefield").value;
+		var description = document.getElementById("SubSampleDescription").value;
+		var danger = document.getElementById("danger").value;
+		var amount = document.getElementById("amount").value;
+		var unit = document.getElementById("unit").value;
+		var subSample = '{"name":"' + name + '", "description" : "'
+				+ description + '" , "danger" : "' + danger + '", "amount" : "'
+				+ amount + '", "unit" : "' + unit + '"}';
+		console.log(subSample);
+
+	postRequest(subSample ,"/addSubSampleToSample/" + id,AddNewSubSampleToSampleCallback);
+}
+function AddNewSubSampleToSampleCallback(responseText) {
+	ListSubSamples();
+}
+
+function FindSampleByName() {
+	var xhttp = new XMLHttpRequest();
+	var name = document.getElementById("samplename").value;
+	postRequest(name, "/finterSamplesListTable/",FindSampleByNameCallback);
+}
+function FindSampleByNameCallback(responseText) {
+	console.log(responseText);
+	var samples = JSON.parse(responseText);
+	document.getElementById("filterSamplesListTabletable").innerHTML = "";
+	SamplesByNameToTable(samples);
+}
+
+function Sampledeleter() {
+	var id = document.getElementById("deleteSamplefield").value;
+	deleteRequest(null, "/sample/" + id, SampledeleterCallback);
+}
+function SampledeleterCallback(responseText) {
+	ListSamples();
+}
+
+function subSampledeleter() {
+	var id = document.getElementById("deleteSubSamplefield").value;
+	deleteRequest(null, "/subsample/" + id, subSampledeleterCallback);
+}
+
+function subSampledeleterCallback(responseText) {
+	ListSubSamples();
+}
+
+function ListProjects() {
+	getRequest(null,"/projectlist", ListProjectsCallback);
+}
+
+function ListProjectsCallback(responseText) {
+	document.getElementById("list").innerHTML = "";
+	console.log(responseText);
+	var projects = JSON.parse(responseText);
+	ProjectListToTable(projects);
+	hideButton();
+	NavList(projects);
+}
+
+function GetOneProject() {
+	var xhttp = new XMLHttpRequest();
+	var id = document.getElementById("ProjectID").value;
+	getRequest(null, "/findProject/" + id, GetOneProjectCallback);
+}
+
+function GetOneProjectCallback(responseText) {
+	console.log(responseText);
+	var project = JSON.parse(responseText);
+	document.getElementById("projectnameChange").value = project.name;
+	document.getElementById("projectcommentChange").value = project.comment;
+	showButton();
+}
+
+
+
+function getRequest(data, url, callback) {
+	xhttpRequest(data,url,callback,"GET");
+}
+function postRequest(data, restUrl, callback) {
+	xhttpRequest(data,url,callback,"POST");
+}
+function deleteRequest(data, url, callback) {
+	xhttpRequest(data,url,callback,"DELETE");
+}
+function xhttpRequest(data, url, callback, type) {
+	var xhttp = new XMLHttpRequest();
+	xhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+			callback(this.responseText);	
+		}
+	};
+	xhttp.open(type, "http://localhost:8082"+url);
+	xhttp.setRequestHeader("Content-type", "application/json");
+	if(data == null) {//geen idee of dit ook anders kan (null opsturen?)
+		xhttp.send();
+	} else {
+		xhttp.send(data);
+	}
+}
+
+
