@@ -4,7 +4,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html ng-app="myApp">
-<script src="js/angular.min.js"></script>
+<script src="./js/angular.min.js"></script>
 <head>
 <meta charset="UTF-8">
 <title>Mens erger je niet - The Game</title>
@@ -96,10 +96,10 @@
 			</div>
 		</div>
 	</div>
-	<script src="/js/sockjs.min.js"></script>
-	<script src="/js/stomp.min.js"></script>
-	<script src="/js/main.js"></script>
-	<script src="/js/mejn.js"></script>
+	<script src="./js/sockjs.min.js"></script>
+	<script src="./js/stomp.min.js"></script>
+	<script src="./js/main.js"></script>
+	<script src="./js/mejn.js"></script>
 
 </body>
 </html>

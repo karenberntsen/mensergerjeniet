@@ -6,7 +6,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link href="<c:url value="css/app.css" />" rel="stylesheet"
+<link href="<c:url value="./css/app.css" />" rel="stylesheet"
 	type="text/css">
 <title>Hello World!</title>
 </head>
@@ -24,7 +24,7 @@
 		<h1>
 			Hello <b><c:out value="${pageContext.request.remoteUser}"></c:out></b>
 		</h1>
-		<form action="/logout" method="post">
+		<form action="./logout" method="post">
 			<input type="submit" class="button red big" value="Sign Out" /> <input
 				type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 		</form>

@@ -5,7 +5,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link href="<spring:url value="css/app.css" />" rel="stylesheet" type="text/css">
+<link href="<spring:url value="./css/app.css" />" rel="stylesheet" type="text/css">
 <title>Spring Security Example - ProgrammingFree</title>
 </head>
 <body class="security-app">

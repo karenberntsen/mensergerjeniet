@@ -12,7 +12,7 @@
   <%@ include file="../html-part/navbar.html" %>
 
       <h2>Login</h2>
-	<form action="/login" method="post">
+	<form action="./login" method="post">
 
 		<div class="lc-block">
 			<div>
