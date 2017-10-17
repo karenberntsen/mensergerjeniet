@@ -29,7 +29,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
  @Override
  protected void configure(HttpSecurity http) throws Exception {
    http.authorizeRequests()
-   .antMatchers("/", "/register", "/login", "/addUser", 									// pagina's die iedereen mag gebruiken
+   .antMatchers("/", "/register", "/login", "/addUser", "/test", 									// pagina's die iedereen mag gebruiken
 		   		"/css/*", "/js/*", "/img/*").permitAll()			// css, js, img mag iedereen bij
    .antMatchers("/chat","/mejn").access("hasRole('ROLE_USER')") 	// users mogen bij deze pagina's
    .antMatchers("/hello").access("hasRole('ROLE_ADMIN')")			// admin page test
@@ -43,7 +43,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
    .and()
    .exceptionHandling().accessDeniedPage("/403")
   .and()
-    .csrf().disable();
+    .csrf();
  }
   
  @Bean(name="passwordEncoder")

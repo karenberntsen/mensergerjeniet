@@ -8,6 +8,7 @@ import nl.MensErgerJeNiet.mensergerjeniet.db.model.Statistics;
 @Repository
 public interface StatisticsRepository extends CrudRepository<Statistics, Long> {
     
-//	@Query("Select * FROM Statistics JOIN User AS u WHERE u.username = ?")
-//	public Statistics findStatisticsByUsername(String username);
+	@Query("SELECT s FROM Statistics s WHERE s.user = (SELECT u FROM User u where u.userName = ?)")
+	public Statistics findStatisticsByUsername(String username);
+
 }

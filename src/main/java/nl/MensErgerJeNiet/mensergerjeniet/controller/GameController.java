@@ -14,6 +14,7 @@ import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -25,6 +26,8 @@ import nl.MensErgerJeNiet.mensergerjeniet.db.model.Statistics;
 import nl.MensErgerJeNiet.mensergerjeniet.db.model.repositories.GameRepository;
 import nl.MensErgerJeNiet.mensergerjeniet.db.model.repositories.StatisticsRepository;
 import nl.MensErgerJeNiet.mensergerjeniet.db.model.repositories.UserRepository;
+import nl.MensErgerJeNiet.mensergerjeniet.db.model.services.GameService;
+import nl.MensErgerJeNiet.mensergerjeniet.db.model.services.StatisticsService;
 import nl.MensErgerJeNiet.mensergerjeniet.game.model.MensErgerJeNiet;
 import nl.MensErgerJeNiet.mensergerjeniet.game.model.Pawn;
 
@@ -33,19 +36,21 @@ import nl.MensErgerJeNiet.mensergerjeniet.game.model.Pawn;
  * Created by rajeevkumarsingh on 24/07/17.
  */
 @Controller
-public class ChatController {
+public class GameController {
 
 	private MensErgerJeNiet mejn = new MensErgerJeNiet();
 
 	@Autowired
+	private SimpMessageSendingOperations messagingTemplate;
+	@Autowired
 	UserRepository userRepository;
 	
 	@Autowired
-	GameRepository gameRepository;
+	GameService gameService;
 	
 	
-//	@Autowired
-//	StatisticsRepository statisticsRepository;
+	@Autowired
+	StatisticsService statService;
 	
 	public void botReplys(ChatMessage message) {
 		if (!message.getType().equals(ChatMessage.MessageType.GAME))
@@ -54,20 +59,20 @@ public class ChatController {
 			Game game = new Game();
 			game.setTurns(mejn.getRounds());
 			game.setWinner(userRepository.findByUserName(mejn.getCurrentPlayer().getName()));
-			gameRepository.save(game);
+			gameService.save(game);
 			List<String> usernames = mejn.getPlayerNames();
 			for(String name : usernames) {
-//				Statistics s = statisticsRepository.findStatisticsByUsername(name);
-//				if(s== null) {
-//					s = new Statistics();
-//					s.setUser(userRepository.findByUserName(name));
-//					if(game.getWinner().getUserName().equals(name)) {
-//						s.setWin(s.getWin()+1);
-//					} else {
-//						s.setLoss(s.getLoss()+1);
-//					}
-//					statisticsRepository.save(s);
-//				}
+				Statistics s = statService.getStatisticsByUsername(name);
+				if(s== null) {
+					s = new Statistics();
+					s.setUser(userRepository.findByUserName(name));
+					if(game.getWinner().getUserName().equals(name)) {
+						s.setWin(s.getWin()+1);
+					} else {
+						s.setLoss(s.getLoss()+1);
+					}
+					statService.save(s);
+				}
 			}
 			//TODO Statistics +1 aantal spellen alle meespelende spelers & +1 wins voor winnende speler (nieuwe statistics aanmaken voor nieuwe spelers)
 			//nieuwe game met aantal beurten + winnende speler
@@ -183,7 +188,10 @@ public class ChatController {
 		return attr.getRequest().getSession(true); // true == allow create
 	}
 
-	@Autowired
-	private SimpMessageSendingOperations messagingTemplate;
-
+	@GetMapping("/test")
+	public String test() {
+		Statistics s = statService.getStatisticsByUsername("yasper");
+		System.out.println(s.getId());
+		return "test";
+	}
 }
