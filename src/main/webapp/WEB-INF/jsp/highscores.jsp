@@ -24,7 +24,7 @@
 					<td>{{ score.user.userName }}</td>
 					<td>{{ score.win }}</td>
 					<td>{{ score.loss }}</td>
-					<td>{{ score.wins+score.loss }}</td>
+					<td>{{ score.win+score.loss }}</td>
 				</tr>
 			</table>
 		</div>

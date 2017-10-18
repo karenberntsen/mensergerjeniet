@@ -26,7 +26,7 @@ public class HighScoreRest {
 	public void del(@PathVariable int id) {
 		System.out.println(id);
 	}
-	  
+	
 	@GetMapping("/highscoresdata")
 	public List<Statistics>getHighscores() {
 		return statisticsService.findAll();

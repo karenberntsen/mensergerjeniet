@@ -178,9 +178,18 @@ public class GameController {
 		System.out.println(s.getId());
 		return "test";
 	}
+	
+	@GetMapping("/mejnreset")
+	public void resetMejn() {
+		mejn = new MensErgerJeNiet();
+	}
 
 	public static HttpSession session() {
 		ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
 		return attr.getRequest().getSession(true); // true == allow create
+	}
+	
+	public static void main(String[] args) {
+		System.out.println(Math.random()*6+1);
 	}
 }
