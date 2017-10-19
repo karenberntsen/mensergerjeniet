@@ -10,5 +10,9 @@ app.controller('myCtrl', function($scope) {
 		$scope.highscores = JSON.parse(responseText);
 		$scope.$apply();
 	}
+	
+	$scope.toInt = function(nr) {
+		return ~~nr;
+	}
 	$scope.loadScores();
 });

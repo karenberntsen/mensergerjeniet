@@ -3,13 +3,15 @@ package nl.MensErgerJeNiet.mensergerjeniet.game.model;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import lombok.Data;
+
 /**
  * Deze klasse representeert het Mens Erger Je Niet spel. Het bestaat uit het
  * bord (board), de spelers (players) en een playerIndex, waarmee bijgehouden
  * wordt welke speler aan de beurt is. Er kunnen zowel computerspelers als
  * menselijke spelers meedoen.
  */
-
+@Data
 public class MensErgerJeNiet {
 
 	private ArrayList<Player> players = new ArrayList<Player>();
@@ -29,7 +31,6 @@ public class MensErgerJeNiet {
 	public void addUser(String name) {
 		addPlayer(new HumanPlayer(name, (players.size() + 1) * 10, board));
 	}
-	
 
 	public void addBot(String name) {
 		addPlayer(new ComputerPlayer(name, (players.size() + 1) * 10, board));
@@ -62,7 +63,7 @@ public class MensErgerJeNiet {
 	}
 
 	public int throwDice() {
-		if (!hasThrown && !isFinished()) {
+		if (!hasThrown && !isFinished() && gameStarted) {
 			dice = (int) (Math.random() * 6 + 1);
 			hasThrown = true;
 			if(getCurrentPlayer().getPlayOptions(dice).isEmpty()) {
@@ -101,24 +102,6 @@ public class MensErgerJeNiet {
 		}
 	}
 	
-	public ArrayList<Pawn> getPawns() {
-		return pawns;
-	}
-	
-	public boolean isFinished() {
-		return finished;
-	}
-	
-	public int getPlayerIndex() {
-		return playerIndex;
-	}
-	
-	public int getDice() {
-		return dice;
-	}
-	public int getRounds() {
-		return rounds;
-	}
 	public ArrayList<String> getPlayerNames() {
 		ArrayList<String> names = new ArrayList<>();
 		for(Player p: players) {

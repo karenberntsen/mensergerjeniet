@@ -1,13 +1,11 @@
 <%@taglib uri = "http://www.springframework.org/tags/form" prefix = "form"%>
 <html>
-   <head>
+   	<head>
       <title>Spring MVC Form Handling</title>
-      
-   </head>
-
+   	  <link rel="stylesheet" href="./css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+ 	</head>
    <body>
-  <%@ include file="../html-part/navbar.html" %>
-   
+  	  <%@ include file="../html-part/navbar.html" %>
       <h2>Create new user</h2>
       <span class='errormessage'>${message}</span>
    <form:form method = "POST" action = "./register">

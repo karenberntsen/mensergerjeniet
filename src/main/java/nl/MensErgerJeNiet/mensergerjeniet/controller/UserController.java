@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import nl.MensErgerJeNiet.mensergerjeniet.db.model.Enabled;
 import nl.MensErgerJeNiet.mensergerjeniet.db.model.User;
 import nl.MensErgerJeNiet.mensergerjeniet.db.model.UserRole;
 import nl.MensErgerJeNiet.mensergerjeniet.db.model.services.UserRoleService;
@@ -50,7 +51,7 @@ public class UserController {
 		if (user.getPassword().length() < 8) {
 			return "Wachtwoord moet minimaal 8 characters lang zijn";
 		}
-		user.setEnabled(1);
+		user.setEnabled(Enabled.DISABLED);
 		user.setPassword(encoder.encode(user.getPassword()));
 		try {
 			user = userService.save(user);

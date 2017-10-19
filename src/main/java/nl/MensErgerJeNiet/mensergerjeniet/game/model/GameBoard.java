@@ -7,7 +7,6 @@ import java.util.TreeMap;
  * Deze klasse representeert het circulaire deel van het spelbord (alle witte vakjes en de startvakjes). Omdat de meeste vakjes vaak leeg zijn, worden ze gerepresenteert door twee HashMaps die bijhouden welke pion op welk vakje staat. De vakjes (fields) worden gerepresenteerd met een nummer tussen de 0 en 40, aangezien dit een bord is voor vier spelers. Lege vakjes worden dus niet opgeslagen. Het blauwe startvakje heeft index 0 en die index loopt op met de klok mee.
  */
 public class GameBoard {
-
 	private TreeMap<Integer,Pawn> gameBoard= new TreeMap<Integer,Pawn>();
 	private HashMap<Pawn,Integer> pawnLocations=new HashMap<Pawn,Integer>();
 	private static final int boardLength = 40;
@@ -100,5 +99,4 @@ public class GameBoard {
 	public int getLocation(Pawn pawn) {
 		return pawnLocations.get(pawn);
 	}
-
 }

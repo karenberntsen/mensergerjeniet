@@ -2,10 +2,12 @@ package nl.MensErgerJeNiet.mensergerjeniet.game.model;
 
 import java.util.ArrayList;
 
+import lombok.Data;
+
 /**
  * Deze klasse representeert een speler. De speler bevat een lijst met zijn pionnen (pawns), de index van het startvakje (start), zijn naam, een lijst die zijn huis representeert (home), een lijst die zijn hok representeert (finish) en het bord waarop zijn pionnen zich gaan verplaatsen. 
  */
-
+@Data
 public abstract class Player {
 	private ArrayList<Pawn> pawns = new ArrayList<Pawn>();
 	private ArrayList<Pawn> home = new ArrayList<Pawn>();
@@ -27,9 +29,6 @@ public abstract class Player {
 		}
 		home.addAll(pawns);
 		System.out.println(name + " is aangemaakt");
-	}
-	public String getName() {
-		return name;
 	}
 	
 	public Pawn getOptionPawn(int index, int dice) {
@@ -212,17 +211,4 @@ public abstract class Player {
 		}
 		return playOptions;
 	}
-
-	public GameBoard getGameBoard() {
-		return board;
-	}
-
-	public ArrayList<Pawn> getPawns() {
-		return pawns;
-	}
-
-	public int getStart() {
-		return start;
-	}
-
 }

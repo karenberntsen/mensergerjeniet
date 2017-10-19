@@ -6,7 +6,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Spring Security Example</title>
+<link rel="stylesheet" href="./css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+ <title>Spring Security Example</title>
 </head>
 <body class="security-app">
   <%@ include file="../html-part/navbar.html" %>
@@ -35,7 +36,7 @@
 		<input type="hidden" name="${_csrf.parameterName}"
 			value="${_csrf.token}" />
 	</form>
-
+	Nog geen account? registreer <a href="./register">hier</a>.
 <%@ include file="../html-part/bootstrap.html" %> 
 </body>
 </html>

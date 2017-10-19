@@ -4,24 +4,15 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
-<head>
-<link href="<spring:url value="./css/app.css" />" rel="stylesheet" type="text/css">
-<title>Spring Security Example - ProgrammingFree</title>
-</head>
-<body class="security-app">
-  <%@ include file="../html-part/navbar.html" %>
-	<div class="details">
-		<h2>Spring Security - JDBC Authentication</h2>
-		<a href="http://www.programming-free.com/2016/01/spring-security-spring-data-jpa.html" class="button green small">Tutorial</a> 
-		<a href="https://github.com/priyadb/SpringSecurityJdbcApp/archive/master.zip"
-			class="button red small">Download</a>
-	</div>
-	<div class="lc-block">
-		<h1>Welcome!</h1>
-		<div class="alert-normal">
-			Click <a href="<spring:url value='/hello' />">here</a> to see a
-			greeting.
-		</div>
-	</div>
-</body>
+	<head>
+		<link href="<spring:url value="./css/app.css" />" rel="stylesheet" type="text/css">
+		<link rel="stylesheet" href="./css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+ 		<title>Spring Security Example - ProgrammingFree</title>
+	</head>
+	<body class="security-app">
+	  	<%@ include file="../html-part/navbar.html" %>
+	  	<a href="./mejn">
+			<img alt="Image not found" src="../img/mejn.png" style="align : left"/>
+		</a>
+	</body>
 </html>

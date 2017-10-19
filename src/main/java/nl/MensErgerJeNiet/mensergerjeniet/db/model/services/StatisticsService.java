@@ -34,4 +34,8 @@ public class StatisticsService {
 	public List<Statistics> findAll() {
 		return (List<Statistics>) statisticsRepository.findAll();
 	}
+	
+	public List<StatisticsInterface> findAllOrdered() {
+		return  statisticsRepository.findAllOrdered();
+	}
 }

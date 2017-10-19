@@ -31,7 +31,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
    .antMatchers("/", "/register", "/login", "/test",   				// pagina's die iedereen mag gebruiken
 		   		"/css/*", "/js/*", "/img/*").permitAll()			// css, js, img mag iedereen bij
    .antMatchers("/chat","/mejn", "/highscores").access("hasRole('ROLE_USER')") 	// users mogen bij deze pagina's
-   .antMatchers("/hello", "/mejnreset").access("hasRole('ROLE_ADMIN')")			// admin page test
+   .antMatchers("/hello", "/mejnreset", "/admin/**", "/admin/**/**").access("hasRole('ROLE_ADMIN')")			// admin page test
    .antMatchers("/**").authenticated()								// ingelogde gebruikers mogen alle urls gebruiken
    .anyRequest().permitAll()
    .and()

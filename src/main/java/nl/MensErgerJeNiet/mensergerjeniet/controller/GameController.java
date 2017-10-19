@@ -10,7 +10,6 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
-import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -23,7 +22,7 @@ import nl.MensErgerJeNiet.mensergerjeniet.config.security.CustomUserDetails;
 import nl.MensErgerJeNiet.mensergerjeniet.controller.ChatMessage.MessageType;
 import nl.MensErgerJeNiet.mensergerjeniet.db.model.Game;
 import nl.MensErgerJeNiet.mensergerjeniet.db.model.Statistics;
-import nl.MensErgerJeNiet.mensergerjeniet.db.model.repositories.UserRepository;
+import nl.MensErgerJeNiet.mensergerjeniet.db.model.User;
 import nl.MensErgerJeNiet.mensergerjeniet.db.model.services.GameService;
 import nl.MensErgerJeNiet.mensergerjeniet.db.model.services.StatisticsService;
 import nl.MensErgerJeNiet.mensergerjeniet.db.model.services.UserService;
@@ -40,7 +39,7 @@ public class GameController {
 	private MensErgerJeNiet mejn = new MensErgerJeNiet();
 
 	@Autowired
-	UserService userRepository;
+	UserService userService;
 	
 	@Autowired
 	GameService gameService;
@@ -52,25 +51,7 @@ public class GameController {
 		if (!message.getType().equals(ChatMessage.MessageType.GAME))
 			return;
 		if(mejn.isFinished()) {
-			Game game = new Game();
-			game.setTurns(mejn.getRounds());
-			game.setWinner(userRepository.findByUserName(mejn.getCurrentPlayer().getName()));
-			gameService.save(game);
-			List<String> usernames = mejn.getPlayerNames();
-			for(String name : usernames) {
-				Statistics s = statService.getStatisticsByUsername(name);
-				if(s== null) {
-					s = new Statistics();
-					s.setUser(userRepository.findByUserName(name));
-					if(game.getWinner().getUserName().equals(name)) {
-						s.setWin(s.getWin()+1);
-					} else {
-						s.setLoss(s.getLoss()+1);
-					}
-					statService.save(s);
-				}
-			}
-			mejn = new MensErgerJeNiet();//reset spel
+			saveGameInfo();
 			return;
 		}
 		
@@ -89,6 +70,32 @@ public class GameController {
 			}
 			sendDataMessage(message, lastAction);
 		}
+	}
+
+	private void saveGameInfo() {
+		Game game = new Game();
+		game.setTurns(mejn.getRounds());
+		game.setWinner(userService.findByUserName(mejn.getCurrentPlayer().getName()));
+		gameService.save(game);
+		List<String> usernames = mejn.getPlayerNames();
+		for(String name : usernames) {
+			saveuserStatistics(game, name);
+		}
+		mejn = new MensErgerJeNiet();//reset spel
+	}
+
+	private void saveuserStatistics(Game game, String name) {
+		Statistics statistics = statService.getStatisticsByUsername(name);
+		if( statistics == null ) {
+			statistics = new Statistics();
+			statistics.setUser(userService.findByUserName(name));
+		}
+		if(game.getWinner().getUserName().equals(name)) {
+			statistics.setWin(statistics.getWin()+1);
+		} else {
+			statistics.setLoss(statistics.getLoss()+1);
+		}
+		statService.save(statistics);
 	}
 	
 	private void sendDataMessage(ChatMessage message, String lastAction) {
@@ -174,8 +181,17 @@ public class GameController {
 
 	@GetMapping("/test")
 	public String test() {
-		Statistics s = statService.getStatisticsByUsername("yasper");
-		System.out.println(s.getId());
+		User user = userService.findByUserName("yasper");
+		User user2 = userService.findByUserName("test2");
+		mejn.addUser("piet");
+		mejn.addUser("jan");
+		mejn.addUser("yasper");
+		mejn.addUser("test2");
+		mejn.startGame();
+		mejn.setRounds((int)(Math.random()*2000)+50);
+		saveGameInfo();
+//		Statistics s = statService.getStatisticsByUsername("yasper");
+//		System.out.println(s.getId());
 		return "test";
 	}
 	

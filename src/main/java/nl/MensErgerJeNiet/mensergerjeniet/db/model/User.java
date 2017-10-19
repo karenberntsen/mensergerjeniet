@@ -36,7 +36,7 @@ public class User implements Serializable {
 
 	@NotNull
 	@Column(name ="enabled")
-	private int enabled;
+	private Enabled enabled;
 	public User(){}
 	
 	public User(User user) {

@@ -14,7 +14,7 @@ public class UserClassTests {
 	private String username = "Yasper";
 	private String password = "password";
 	private String email = "yasper_katgert@hotmail.com";
-	private int enabled = 1;
+	private Enabled enabled = Enabled.ENABLED;
 	@Before
 	public void b4() {
 		user = new User();

@@ -1,6 +1,5 @@
 package nl.MensErgerJeNiet.mensergerjeniet.rest;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import nl.MensErgerJeNiet.mensergerjeniet.db.model.Statistics;
+import nl.MensErgerJeNiet.mensergerjeniet.db.model.services.StatisticsInterface;
 import nl.MensErgerJeNiet.mensergerjeniet.db.model.services.StatisticsService;
 
 @RestController
@@ -28,7 +28,7 @@ public class HighScoreRest {
 	}
 	
 	@GetMapping("/highscoresdata")
-	public List<Statistics>getHighscores() {
-		return statisticsService.findAll();
+	public List<StatisticsInterface> getHighscores() {
+		return statisticsService.findAllOrdered();
 	}
 }

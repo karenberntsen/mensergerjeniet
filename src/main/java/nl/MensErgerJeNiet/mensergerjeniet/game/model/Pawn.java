@@ -1,12 +1,14 @@
 package nl.MensErgerJeNiet.mensergerjeniet.game.model;
 
+import lombok.Data;
+
 /**
  * Deze klasse representeert een pion. De locatie geeft aan of de pion zich in
  * het huis, in het hok of op het bord bevindt. Het pionnummer (pawnNumber) is
  * een nummer tussen de 1 en 4. Hiermee kan onderscheid gemaakt worden tussen de
  * verschillende pionnen van een speler (player).
  */
-
+@Data
 public class Pawn {
 
 	private Location location;
@@ -18,26 +20,10 @@ public class Pawn {
 		return ("Pion " + pawnNumber);
 	}
 
-	public int getPawnNumber() {
-		return (pawnNumber);
-	}
-
 	public Pawn(Player player, int number) {
 		this.player = player;
 		this.location = Location.HOME;
 		this.pawnNumber = number;
-	}
-
-	public Location getLocation() {
-		return location;
-	}
-
-	public void setLocation(Location location) {
-		this.location = location;
-	}
-
-	public Player getPlayer() {
-		return this.player;
 	}
 
 	public int getIndex() {
@@ -62,6 +48,6 @@ public class Pawn {
 	}
 
 	public int indexOfBoard() {
-		return player.getGameBoard().getLocation(this);
+		return player.getBoard().getLocation(this);
 	}
 }

@@ -6,9 +6,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link href="<c:url value="./css/app.css" />" rel="stylesheet"
-	type="text/css">
-<title>Hello World!</title>
+<link href="<c:url value="./css/app.css" />" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="./css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+ <title>Hello World!</title>
 </head>
 <body class="security-app">
   <%@ include file="../html-part/navbar.html" %>
