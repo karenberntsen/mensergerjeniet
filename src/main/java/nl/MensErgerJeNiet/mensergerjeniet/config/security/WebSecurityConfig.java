@@ -28,7 +28,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
  @Override
  protected void configure(HttpSecurity http) throws Exception {
    http.authorizeRequests()
-   .antMatchers("/", "/register", "/login", "/test", "/gameslist",   				// pagina's die iedereen mag gebruiken
+   .antMatchers("/", "/register","/registeruser", "/login", "/test", "/gameslist",   				// pagina's die iedereen mag gebruiken
 		   		"/css/*", "/js/*", "/img/*").permitAll()			// css, js, img mag iedereen bij
    .antMatchers("/highscores").access("hasRole('ROLE_USER')") 	// users mogen bij deze pagina's
    .antMatchers("/hello", "/admin/**").access("hasRole('ROLE_ADMIN')")			// admin page test
