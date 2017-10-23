@@ -6,14 +6,13 @@
 	<head> 
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 		<title>Highscores</title>
-		<script src="./js/angular.min.js" ></script>
-		<script src="./js/xhttpRequest.js"></script>
-		<script src="./js/highscores.js"  ></script>
-		<link rel="stylesheet" href="./css/highscores.css">
-		<link rel="stylesheet" href="./css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+		<script src="<c:url value="/js/angular.min.js" />"></script>
+		<script src="<c:url value="/js/highscores.js"  />" ></script>
+		<link rel="stylesheet" href="<c:url value="/css/highscores.css" />">
+		<link rel="stylesheet" href="<c:url value="/css/bootstrap.min.css" />">
 	</head>
 	<body>
-		<%@ include file="../html-part/navbar.html"%>
+		<%@ include file="../html-part/navbar.jsp"%>
 		<div>
 			<h1>Highscores</h1>
 			<div ng-controller="myCtrl">
@@ -37,5 +36,7 @@
 				</table>
 			</div>
 		</div>
+		
+	<%@ include file="../html-part/bootstrap.html" %>
 	</body>
 </html>

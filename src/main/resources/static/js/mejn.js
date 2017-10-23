@@ -1,3 +1,26 @@
+var messageForm = document.querySelector('#messageForm');
+var messageInput = document.getElementById("message");
+var messageArea = document.querySelector('#messageArea');
+var connectingElement = document.querySelector('.connecting');
+var channel = location.pathname.substring(location.pathname.lastIndexOf('/')+1,location.pathname.length);
+
+var d = 6;
+var stompClient = null;
+var username = null;
+var colors = [
+    '#2196F3', '#32c787', '#00BCD4', '#ff5652',
+    '#ffc107', '#ff85af', '#FF9800', '#39bbb0'
+];
+function getAvatarColor(messageSender) {
+    var hash = 0;
+    for (var i = 0; i < messageSender.length; i++) {
+        hash = 31 * hash + messageSender.charCodeAt(i);
+    }
+
+    var index = Math.abs(hash % colors.length);
+    return colors[index];
+}
+
 var app = angular.module('myApp', [])
 .controller('myCtrl', function($scope) {
   $scope.whiteCircles = [
@@ -48,7 +71,7 @@ var app = angular.module('myApp', [])
 	       content: 'pion '+id,
 	       type: 'GAME'
 	    };
-	    stompClient.send("/app/chat.sendMessage", {}, JSON.stringify(chatMessage));
+	    stompClient.send("/app/chat.sendMessage/"+channel, {}, JSON.stringify(chatMessage));
 	 }
 };
 
@@ -58,15 +81,19 @@ $scope.startGame = function() {
 	            content: 'start',
 	            type: 'GAME'
 	        };
-	        stompClient.send("/app/chat.sendMessage", {}, JSON.stringify(chatMessage));
+	        stompClient.send("/app/chat.sendMessage/"+channel, {}, JSON.stringify(chatMessage));
 	    }
 	    event.preventDefault();
+};
+
+$scope.joinGame = function() {
+	postRequest(null, "/../game/"+channel+"/join");
 };
 
 $scope.throwEffect = function(dice, pid) {
 	for(var i = 0; i < 9; ++ i) {
 		setTimeout(function() {
-			document.getElementById("dice").href.baseVal = "img/"+((~~(Math.random()*6))+1)+".png";
+			document.getElementById("dice").href.baseVal = "../img/"+((~~(Math.random()*6))+1)+".png";
 		}, i*50);
 	}
 	setTimeout(function() {
@@ -90,13 +117,16 @@ $scope.throwDice = function() {
             content: 'throw',
             type: 'GAME'
         };
-        stompClient.send("/app/chat.sendMessage", {}, JSON.stringify(chatMessage));
+        stompClient.send("/app/chat.sendMessage/"+channel, {}, JSON.stringify(chatMessage));
     }
-    event.preventDefault();
+};
+
+$scope.throwDiceHax = function() {
+	postRequest(null, "/../game/"+channel+"/hax/"+d);
 };
   
  $scope.changeDice = function(dice, pid) {
-	 document.getElementById("dice").href.baseVal = "img/"+dice+".png";
+	 document.getElementById("dice").href.baseVal = "../img/"+dice+".png";
      document.getElementById("dicebg").style.fill = $scope.colours[pid]
      document.getElementById("dicebg").style.stroke = $scope.colours[pid];
  }
@@ -138,8 +168,6 @@ $scope.throwDice = function() {
      } else {
      	$scope.changeDice(total.dice, total.pid);
      }
-
-     document.getElementById("start").style.display = "none";
      $scope.$apply();
  }
  
@@ -191,7 +219,7 @@ $scope.sendMessage = function(event) {
             type: 'CHAT'
         };
 
-        stompClient.send("/app/chat.sendMessage", {}, JSON.stringify(chatMessage));
+        stompClient.send("/app/chat.sendMessage/"+channel, {}, JSON.stringify(chatMessage));
         messageInput.value = '';
     }
     event.preventDefault();
@@ -199,10 +227,10 @@ $scope.sendMessage = function(event) {
 
 $scope.onConnected = function() {
     // Subscribe to the Public Channel
-    stompClient.subscribe('/channel/public', $scope.onMessageReceived);
+    stompClient.subscribe('/channel/public/'+channel, $scope.onMessageReceived);
 
     // Tell your username to the server
-    stompClient.send("/app/chat.addUser",
+    stompClient.send("/app/chat.addUser/"+channel,
         {},
         JSON.stringify({sender: null, type: 'JOIN'})
     )
@@ -217,7 +245,7 @@ $scope.onError = function(error) {
 };
 
 $scope.conn = function() {
-    var socket = new SockJS('./ws');
+    var socket = new SockJS('../ws');
     stompClient = Stomp.over(socket);
     stompClient.connect({}, $scope.onConnected, $scope.onError);
 };

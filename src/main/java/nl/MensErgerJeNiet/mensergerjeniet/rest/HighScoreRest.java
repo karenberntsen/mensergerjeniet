@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import nl.MensErgerJeNiet.mensergerjeniet.db.model.Statistics;
 import nl.MensErgerJeNiet.mensergerjeniet.db.model.services.StatisticsInterface;
 import nl.MensErgerJeNiet.mensergerjeniet.db.model.services.StatisticsService;
 
@@ -16,11 +15,6 @@ import nl.MensErgerJeNiet.mensergerjeniet.db.model.services.StatisticsService;
 public class HighScoreRest {
 	@Autowired
 	StatisticsService statisticsService;
-	
-	@GetMapping("/testt")
-	public String mapp() {
-		return "testtesttest";
-	}
 	
 	@DeleteMapping("/del/{id}")
 	public void del(@PathVariable int id) {

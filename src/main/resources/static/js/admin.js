@@ -5,13 +5,13 @@ app.controller('adminCtrl', function($scope) {
 	$scope.deletedUsers = [];
 	
 	$scope.loadEnabledUsers = function() {
-		getRequest(null, "./admin/enabledUsers", $scope.loadEnabledUsersCallback);
+		getRequest(null, "/admin/enabledUsers", $scope.loadEnabledUsersCallback);
 	};
 	$scope.loadDisabledUsers = function() {
-		getRequest(null, "./admin/disabledUsers", $scope.loadDisabledUsersCallback);
+		getRequest(null, "/admin/disabledUsers", $scope.loadDisabledUsersCallback);
 	};
 	$scope.loadDeletedUsers = function() {
-		getRequest(null, "./admin/deletedUsers", $scope.loadDeletedUsersCallback);
+		getRequest(null, "/admin/deletedUsers", $scope.loadDeletedUsersCallback);
 	};
 	
 	$scope.loadEnabledUsersCallback = function(responseText) {

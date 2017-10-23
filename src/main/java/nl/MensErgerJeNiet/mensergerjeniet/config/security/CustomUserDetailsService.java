@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import nl.MensErgerJeNiet.mensergerjeniet.db.model.Enabled;
 import nl.MensErgerJeNiet.mensergerjeniet.db.model.User;
 import nl.MensErgerJeNiet.mensergerjeniet.db.model.UserRole;
 import nl.MensErgerJeNiet.mensergerjeniet.db.model.repositories.UserRepository;
@@ -27,7 +28,9 @@ public class CustomUserDetailsService implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		User user = userRepository.findByUserName(username);
+		System.out.println(username);
+		User user = userRepository.findByUserNameAndEnabled(username, Enabled.ENABLED);
+		System.out.println(user);
 		if (null == user) {
 			throw new UsernameNotFoundException("No user present with username: " + username);
 		} else {

@@ -6,12 +6,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link href="<c:url value="./css/app.css" />" rel="stylesheet" type="text/css">
-<link rel="stylesheet" href="./css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+<link href="<c:url value="/css/app.css" />" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="/css/bootstrap.min.css">
  <title>Hello World!</title>
 </head>
 <body class="security-app">
-  <%@ include file="../html-part/navbar.html" %>
+  <%@ include file="../html-part/navbar.jsp" %>
 	<div class="details">
 
 		<h2>Spring Security - JDBC Authentication</h2>
@@ -24,11 +24,12 @@
 		<h1>
 			Hello <b><c:out value="${pageContext.request.remoteUser}"></c:out></b>
 		</h1>
-		<form action="./logout" method="post">
+		<form action="<c:url value="/logout" />" method="post">
 			<input type="submit" class="button red big" value="Sign Out" /> <input
 				type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 		</form>
 	</div>
 
+	<%@ include file="../html-part/bootstrap.html" %>
 </body>
 </html>

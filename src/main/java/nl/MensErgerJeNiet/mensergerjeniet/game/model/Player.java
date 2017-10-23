@@ -16,6 +16,9 @@ public abstract class Player {
 	private String name;
 	private GameBoard board;
 
+	public boolean equals(Player p) {
+		return name.equals(p.getName());
+	}
 	/**
 	 * Constructor. Hij maakt voor deze speler vier pionnen aan en zet ze in zijn huis.
  	 */
@@ -122,6 +125,7 @@ public abstract class Player {
 	 * Deze functie verplaatst een pion het aantal vakjes van de dobbelsteen (dice) en print wat hij doet. Aangezien de 'doTurn' alleen pionnen meegeeft die gezet kunnen worden, hoeft dat hier niet opnieuw gecheckt te worden.
  	 */
 	public void movePawn(Pawn pawn, int dice)  {
+		System.out.println("move pawn");
 		switch (pawn.getLocation()) {
 			case HOME:
 				System.out.println(this.toString() + " zet een nieuwe pion op het bord");

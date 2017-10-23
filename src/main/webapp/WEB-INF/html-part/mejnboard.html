@@ -1,6 +1,10 @@
 <svg
-	style="width: 100vmin; height: 100vmin; top: 300; left: 0; bottom: 0; right: 0;"
-	xmlns="http://www.w3.org/2000/svg">
+	style="width: 100vmin; height: 100vmin; top: 300; left: 0; bottom: 0; right: 0;
+	-moz-user-select: none; -webkit-user-select: none; -ms-user-select:none; user-select:none;-o-user-select:none;"
+	xmlns="http://www.w3.org/2000/svg"
+	unselectable="on"
+	onselectstart="return false;" 
+	onmousedown="return false;">
 	<!-- Zet de namen op het scherm -->
 	<text ng-repeat="player in playerNames"
 		ng-attr-x="{{circleCoordinates[player.x]}}%"
@@ -38,14 +42,20 @@
 			ng-attr-y="{{circleCoordinates[5]-circleRadius}}%"
 			height="{{2*circleRadius}}%" width="{{2*circleRadius}}%"
 			fill="#668cff" stroke="#668cff"/> 
-		<image id="dice" ng-click="throwDice()" xlink:href="img/1.png"
+		<image id="dice" ng-click="throwDice()" xlink:href="../img/1.png"
 			ng-attr-x="{{circleCoordinates[5]-circleRadius}}%"
 			ng-attr-y="{{circleCoordinates[5]-circleRadius}}%"
 			height="{{2*circleRadius}}%" width="{{2*circleRadius}}%" />
 	</g>
 	
 	<!-- Zet de startknop op het scherm -->
-	<image id="start" ng-click="startGame()"
-		xlink:href="img/start_button.png" ng-attr-x="33%" ng-attr-y="88%"
-		height="{{5*circleRadius}}%" width="{{10*circleRadius}}%" />
+	<text 	ng-attr-x="25%"
+			ng-attr-y="2%" text-anchor="middle"
+			stroke="black" stroke-width="2px" ng-click="throwDiceHax()">HAX</text>
+	<text 	ng-attr-x="39%"
+			ng-attr-y="2%" text-anchor="middle"
+			stroke="black" stroke-width="2px" ng-click="joinGame()">JOIN</text>
+	<text 	ng-attr-x="55%"
+			ng-attr-y="2%" text-anchor="middle"
+			stroke="black" stroke-width="2px" ng-click="startGame()">START</text>
 </svg>

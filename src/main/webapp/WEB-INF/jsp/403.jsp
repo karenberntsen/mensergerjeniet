@@ -3,13 +3,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="stylesheet" href="./css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
-<link href="css/app.css"rel="stylesheet"
+<link rel="stylesheet" href="<c:url value="/css/bootstrap.min.css"/>" >
+<link href="<c:url value="/css/app.css" />"rel="stylesheet"
 	type="text/css"></link>
 <title>Spring Security Example - ProgrammingFree</title>
 </head>
 <body class="security-app">
-  <%@ include file="../html-part/navbar.html" %>
+  <%@ include file="../html-part/navbar.jsp" %>
 	<div class="details">
 	<h2>Spring Security - JDBC Authentication</h2>
 		<a href="http://www.programming-free.com/2016/01/spring-security-spring-data-jpa.html" class="button green small">Tutorial</a> 
@@ -20,10 +20,12 @@
 		<div class="alert-danger">
 			<h3>You do not have permission to access this page!</h3>	
 		</div>
-		<form action="./logout" method="post">
+		<form action="<c:url value="/logout"/>" method="post">
 			<input type="submit" class="button red big" value="Sign in as different user" /> <input
 				type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 		</form>		
 	</div>	
+	
+	<%@ include file="../html-part/bootstrap.html" %>
 </body>
 </html>

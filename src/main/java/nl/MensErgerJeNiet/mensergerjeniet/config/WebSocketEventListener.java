@@ -14,7 +14,7 @@ import org.springframework.web.socket.messaging.SessionConnectEvent;
 import org.springframework.web.socket.messaging.SessionConnectedEvent;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
-import nl.MensErgerJeNiet.mensergerjeniet.controller.ChatMessage;
+import nl.MensErgerJeNiet.mensergerjeniet.rest.ChatMessage;
 
 /**
  * Created by rajeevkumarsingh on 25/07/17.

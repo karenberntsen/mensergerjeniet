@@ -1,4 +1,4 @@
-package nl.MensErgerJeNiet.mensergerjeniet.controller;
+package nl.MensErgerJeNiet.mensergerjeniet.rest;
 
 /**
  * Created by rajeevkumarsingh on 24/07/17.

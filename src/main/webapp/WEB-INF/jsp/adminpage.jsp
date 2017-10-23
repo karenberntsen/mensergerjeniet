@@ -6,18 +6,18 @@
 	<head> 
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 		<title>Admin page</title>
-		<script src="../js/angular.min.js" ></script>
-		<script src="../js/xhttpRequest.js"></script>
-		<script src="../js/admin.js"  ></script>
+		<script src="<c:url value="/js/angular.min.js"/>" ></script>
+		<script src="<c:url value="/js/main.js"/>"></script>
+		<script src="<c:url value="/js/admin.js"/>"  ></script>
 		<script>
 		var _csrf ={"name": "${_csrf.parameterName}", "token": "${_csrf.token}"};
 		</script>
-		<link rel="stylesheet" href="../css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+		<link rel="stylesheet" href="<c:url value="/css/bootstrap.min.css"/>" >
  
-		<link rel="stylesheet" href="../css/admin.css">
+		<link rel="stylesheet" href="<c:url value="/css/admin.css" />">
 	</head>
 	<body>
-		<%@ include file="../html-part/adminNavbar.html"%>
+		<%@ include file="../html-part/adminNavbar.jsp"%>
 		<div>
 			<h1>Users</h1>
 			<div ng-controller="adminCtrl">
@@ -77,5 +77,7 @@
 				</table>
 			</div>
 		</div>
+		
+	<%@ include file="../html-part/bootstrap.html" %>
 	</body>
 </html>

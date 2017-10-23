@@ -1,38 +1,57 @@
 'use strict';
-var messageForm = document.querySelector('#messageForm');
-var messageInput = document.querySelector('#message');
-var messageArea = document.querySelector('#messageArea');
-var connectingElement = document.querySelector('.connecting');
-
-var stompClient = null;
-var username = null;
-var colors = [
-    '#2196F3', '#32c787', '#00BCD4', '#ff5652',
-    '#ffc107', '#ff85af', '#FF9800', '#39bbb0'
-];
-var pawns;
-
-
-function movePawn2(pawn) {
-	alert("pawn");
-	if(stompClient) {
-        var chatMessage = {
-           content: 'pion '+pawn,
-            type: 'GAME'
-        };
-
-        stompClient.send("/app/chat.sendMessage", {}, JSON.stringify(chatMessage));
-    }
+var server = ".";
+function logout() {
+	postRequest(null,"/logout",null);
 }
 
-function getAvatarColor(messageSender) {
-    var hash = 0;
-    for (var i = 0; i < messageSender.length; i++) {
-        hash = 31 * hash + messageSender.charCodeAt(i);
-    }
-
-    var index = Math.abs(hash % colors.length);
-    return colors[index];
+function register() {
+	var data = {};
+	data.userName= document.getElementById("username").value;
+	data.email = document.getElementById("email").value;
+	data.password = document.getElementById("password").value;
+	postRequest(JSON.stringify(data), "/registeruser", registerCallback);
 }
 
-//messageForm.addEventListener('submit', sendMessage, true)
+function registerCallback(responseText) {
+	alert(responseText);
+	if(responseText == "ok") {
+		location.pathname = location.pathname.substring(0, location.pathname.lastIndexOf('/'))+"/login";
+	}
+}
+
+function getRequest(data, url, callback) {
+	xhttpRequest(data, url, callback, "GET");
+}
+
+function postRequest(data, url, callback) {
+	xhttpRequest(data, url, callback, "POST");
+}
+
+function putRequest(data, url, callback) {
+	xhttpRequest(data, url, callback, "PUT");
+}
+
+function deleteRequest(data, url, callback) {
+	xhttpRequest(data, url, callback, "DELETE");
+}
+
+function xhttpRequest(data, url, callback, type) {
+	var xhttp = new XMLHttpRequest();
+	xhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+			if(callback != null) {
+				callback(this.responseText);
+			}
+		}
+	};
+	xhttp.open(type, server + url);
+	xhttp.setRequestHeader("Content-type", "application/json");
+	if( typeof _csrf === 'object' && _csrf !== null && _csrf.name != "") {
+		xhttp.setRequestHeader('X-CSRF-TOKEN', _csrf.token);
+	}
+	if (data == null) {// geen idee of dit ook anders kan (null opsturen?)
+		xhttp.send();
+	} else {
+		xhttp.send(data);
+	}
+}

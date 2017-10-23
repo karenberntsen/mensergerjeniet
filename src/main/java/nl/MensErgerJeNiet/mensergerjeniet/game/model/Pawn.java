@@ -50,4 +50,7 @@ public class Pawn {
 	public int indexOfBoard() {
 		return player.getBoard().getLocation(this);
 	}
+	public boolean equals(Pawn p) {
+		return pawnNumber == p.getPawnNumber();
+	}
 }

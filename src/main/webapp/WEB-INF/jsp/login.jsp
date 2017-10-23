@@ -6,11 +6,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="stylesheet" href="./css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+<link rel="stylesheet" href="<c:url value="/css/bootstrap.min.css" />" >
  <title>Spring Security Example</title>
 </head>
 <body class="security-app">
-  <%@ include file="../html-part/navbar.html" %>
+  <%@ include file="../html-part/navbar.jsp" %>
       <h2>Login</h2>
 	<form action="./login" method="post">
 
@@ -27,7 +27,7 @@
 				<input type="submit" value="Sign In" class="button red small" />
 			</div>
 			<c:if test="${param.error ne null}">
-				<div class="alert-danger">Invalid username and password.</div>
+				<div class="alert-danger">Invalid username and password or your account has been disabled</div>
 			</c:if>
 			<c:if test="${param.logout ne null}">
 				<div class="alert-normal">You have been logged out.</div>
@@ -36,7 +36,7 @@
 		<input type="hidden" name="${_csrf.parameterName}"
 			value="${_csrf.token}" />
 	</form>
-	Nog geen account? registreer <a href="./register">hier</a>.
+	Nog geen account? registreer <a href="<c:url value="/register" />">hier</a>.
 <%@ include file="../html-part/bootstrap.html" %> 
 </body>
 </html>

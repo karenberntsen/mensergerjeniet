@@ -1,15 +1,12 @@
-package nl.MensErgerJeNiet.mensergerjeniet.controller;
+package nl.MensErgerJeNiet.mensergerjeniet.rest;
 
 import java.security.NoSuchAlgorithmException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import nl.MensErgerJeNiet.mensergerjeniet.db.model.Enabled;
 import nl.MensErgerJeNiet.mensergerjeniet.db.model.User;
@@ -17,7 +14,7 @@ import nl.MensErgerJeNiet.mensergerjeniet.db.model.UserRole;
 import nl.MensErgerJeNiet.mensergerjeniet.db.model.services.UserRoleService;
 import nl.MensErgerJeNiet.mensergerjeniet.db.model.services.UserService;
 
-@Controller
+@RestController
 public class UserController {
 	@Autowired
 	UserService userService;
@@ -26,21 +23,17 @@ public class UserController {
 	@Autowired
 	PasswordEncoder encoder;
 
-	public ModelAndView user() {
-		return new ModelAndView("user", "command", new User());
-	}
-
-	@PostMapping("/register")
-	public ModelAndView register(@ModelAttribute("SSO") User user, ModelMap model) throws NoSuchAlgorithmException {
+	@PostMapping("/registeruser")
+	public String register(@RequestBody User user) throws NoSuchAlgorithmException {
+		System.out.println(user);
 		user.setEmail(user.getEmail().toLowerCase());
 		String returnMessage = addUser(user);
 		if(returnMessage != null) {
-			return getRegisterPageWithMessage(returnMessage, model);
+			return returnMessage;
 		} else {
 			addUserRoleToUser(user);
 		}
-		
-		return new ModelAndView("home");
+		return "ok";
 	}
 
 	private String addUser(User user) {
@@ -51,7 +44,7 @@ public class UserController {
 		if (user.getPassword().length() < 8) {
 			return "Wachtwoord moet minimaal 8 characters lang zijn";
 		}
-		user.setEnabled(Enabled.DISABLED);
+		user.setEnabled(Enabled.ENABLED);//TODO enabled -> disabled en na een mail + code invoeren enabled zetten
 		user.setPassword(encoder.encode(user.getPassword()));
 		try {
 			user = userService.save(user);
@@ -66,15 +59,5 @@ public class UserController {
 		userRole.setUser(user);
 		userRole.setRole("ROLE_USER");
 		userRolesService.save(userRole);
-	}
-
-	public ModelAndView getRegisterPageWithMessage(String message, ModelMap model) {
-		model.addAttribute("message", message);
-		return registerPage();
-	}
-
-	@GetMapping("/register")
-	public ModelAndView registerPage() {
-		return new ModelAndView("user", "command", new User());
 	}
 }
