@@ -17,15 +17,26 @@
 			</li>
 		</ul>
 		<ul class="nav navbar-nav navbar-right">
-			<li class="nav-item right"><a class="nav-link"
-				href="<c:url value="./admin"/>">Admin</a>
-			</li>
-			<li class="nav-item right"><a class="nav-link"
-				href="<c:url value="./login"/>">Login</a>
-			</li>
-			<li class="nav-item right"><a class="nav-link" href="#"
-				onclick="logout()">Logout</a>
-			</li>
+		<c:choose>
+			<c:when test="${empty sessionScope.name}">
+				<li class="nav-item right"><a class="nav-link"
+					href="<c:url value="./login"/>">Login</a>
+				</li>
+			</c:when>
+			<c:otherwise>
+				<li class="nav-item right">
+					<a class="nav-link active disabled" disabled
+					><c:out value="${sessionScope.name}"/> </a>
+				</li>
+				<li class="nav-item right">
+					<form action="<c:url value="/logout"/>" method="post">
+						<a href="javascript:;" onclick="parentNode.submit();" class="nav-link active">Logout</a>
+						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+					</form>
+				</li>
+			</c:otherwise>
+		</c:choose>
+	
 		</ul>
 	</div>
 </nav>

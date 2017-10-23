@@ -19,15 +19,22 @@
 				<input type="button" value="Start board" ng-click="newBoard()"/>
 			</form>
 			<h1>Current Games</h1>
-			<table>
-				<tr ng-repeat="gameInfo in list">	
-					<td><form method="get" action="{{'./mejn/' + gameInfo.id}}">
-						    <button type="submit">Watch Game</button>
-						</form></td>
-					<td><b>{{gameInfo.id}}</b></td>
-					<td ng-repeat="player in gameInfo.playerNames">{{player}} </td>
-				</tr>
-			</table>
+			<div class="card-deck">
+				<div class="card" style="width: 33%;" ng-repeat="gameInfo in list">
+					<div class="clearfix" ng-if="$index % 3 == 0"></div>
+				  <div class="card-block">
+				    <h4 class="card-title">{{gameInfo.id}}</h4>
+				    <p class="card-text">
+				    	<ul>
+				    		<li ng-repeat="player in gameInfo.playerNames">{{player}} </li>
+				    	</ul>	
+				    </p>
+				   <form method="get" action="{{'./mejn/' + gameInfo.id}}">
+						<button type="submit">Watch Game</button>
+					</form>
+				  </div>
+				</div>
+			</div>
 		</div>
 	</body>
 </html>

@@ -10,7 +10,7 @@ app.controller('indexCtrl', function($scope) {
 	}
 	
 	$scope.newBoard = function() {
-		 location.pathname = location.pathname+"/mejn/"+document.getElementById("boardId").value;
+		 location.pathname = location.pathname+"/mejn/"+$("#boardId")[0].value;
 	}
 	$scope.getGamesList();
 });

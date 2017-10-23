@@ -58,4 +58,7 @@
 	<text 	ng-attr-x="55%"
 			ng-attr-y="2%" text-anchor="middle"
 			stroke="black" stroke-width="2px" ng-click="startGame()">START</text>
+	<text 	ng-attr-x="69%"
+			ng-attr-y="2%" text-anchor="middle"
+			stroke="black" stroke-width="2px" ng-click="startGame()">DELETE</text>
 </svg>
