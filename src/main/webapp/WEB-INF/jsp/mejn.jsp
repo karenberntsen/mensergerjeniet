@@ -7,21 +7,19 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>Mens erger je niet - The Game</title>
-		<script src="<c:url value="/js/angular.min.js"/>"></script>
+	<%@ include file="../html-part/jsCssIncludes.jsp" %>
 		<script src="<c:url value="/js/sockjs.min.js" />"></script>
 		<script src="<c:url value="/js/stomp.min.js"  />"></script>
 		<script src="<c:url value="/js/mejn.js"       />"></script>
 		<script>
 		var _csrf ={"name": "${_csrf.parameterName}", "token": "${_csrf.token}"};
 		</script>
-		<link rel="stylesheet" href="<c:url value="/css/bootstrap.min.css"/>" >
  	</head>
 	<body>
 		<%@ include file="../html-part/navbar.jsp"%>
 		<div ng-controller="myCtrl">
-			<%@ include file="../html-part/mejnboard.html" %>
-			<%@ include file="../html-part/chat.html" %>
+			<%@ include file="../html-part/mejnboard.jsp" %>
+			<%@ include file="../html-part/chat.jsp" %>
 		</div>
-	<%@ include file="../html-part/bootstrap.html" %>
 	</body>
 </html>

@@ -3,10 +3,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="stylesheet" href="<c:url value="/css/bootstrap.min.css"/>" >
-<link href="<c:url value="/css/app.css" />"rel="stylesheet"
-	type="text/css"></link>
-<title>Spring Security Example - ProgrammingFree</title>
+	<%@ include file="../html-part/jsCssIncludes.jsp" %>
+	<link href="<c:url value="/css/app.css" />" rel="stylesheet" type="text/css"></link>
+	<title>No Permission!</title>
 </head>
 <body class="security-app">
   <%@ include file="../html-part/navbar.jsp" %>
@@ -26,6 +25,5 @@
 		</form>		
 	</div>	
 	
-	<%@ include file="../html-part/bootstrap.html" %>
 </body>
 </html>

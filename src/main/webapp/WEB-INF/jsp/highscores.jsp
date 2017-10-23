@@ -6,10 +6,9 @@
 	<head> 
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 		<title>Highscores</title>
-		<script src="<c:url value="/js/angular.min.js" />"></script>
+		<%@ include file="../html-part/jsCssIncludes.jsp" %>
 		<script src="<c:url value="/js/highscores.js"  />" ></script>
 		<link rel="stylesheet" href="<c:url value="/css/highscores.css" />">
-		<link rel="stylesheet" href="<c:url value="/css/bootstrap.min.css" />">
 	</head>
 	<body>
 		<%@ include file="../html-part/navbar.jsp"%>
@@ -36,7 +35,5 @@
 				</table>
 			</div>
 		</div>
-		
-	<%@ include file="../html-part/bootstrap.html" %>
 	</body>
 </html>

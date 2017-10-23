@@ -2,10 +2,10 @@
 <html>
 <head>
 <title>Spring MVC Form Handling</title>
-<link rel="stylesheet" href="./css/bootstrap.min.css" >
+	<%@ include file="../html-part/jsCssIncludes.jsp" %>
 	<script>
 		var _csrf ={"name": "${_csrf.parameterName}", "token": "${_csrf.token}"};
-		</script>
+	</script>
 </head>
 <body>
 	<%@ include file="../html-part/navbar.jsp"%>
@@ -16,14 +16,13 @@
 			<label name="username" for="username"
 				class="col-sm-2 col-form-label">Username</label>
 			<input id="username" type="text" class="form-control col-sm-4"
-				 placeholder="Enter username"
-				value='${userName}' />
+				 placeholder="Enter username" />
 		</div>
 		<div class="form-group row">
 			<label name="email" for="email"
 				class="col-sm-2 col-form-label">Email address</label>
 			<input id="email" type="email" class="form-control col-sm-4"
-				 placeholder="Enter email" value='${email}' />
+				 placeholder="Enter email"/>
 		</div>
 		<div class="form-group row">
 			<label name="password" for="password"
@@ -34,7 +33,6 @@
 			<input type="button" onclick="register()"class="btn btn-primary ml-1" value="Create"/>
 		</div>
 	</form>
-	<%@ include file="../html-part/bootstrap.html"%>
 </body>
 
 </html>

@@ -6,14 +6,9 @@
 	<head> 
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 		<title>Admin page</title>
-		<script src="<c:url value="/js/angular.min.js"/>" ></script>
-		<script src="<c:url value="/js/main.js"/>"></script>
+		<%@ include file="../html-part/jsCssIncludes.jsp" %>
 		<script src="<c:url value="/js/admin.js"/>"  ></script>
-		<script>
-		var _csrf ={"name": "${_csrf.parameterName}", "token": "${_csrf.token}"};
-		</script>
-		<link rel="stylesheet" href="<c:url value="/css/bootstrap.min.css"/>" >
- 
+		<script> var _csrf ={"name": "${_csrf.parameterName}", "token": "${_csrf.token}"}; </script>
 		<link rel="stylesheet" href="<c:url value="/css/admin.css" />">
 	</head>
 	<body>
@@ -77,7 +72,5 @@
 				</table>
 			</div>
 		</div>
-		
-	<%@ include file="../html-part/bootstrap.html" %>
 	</body>
 </html>

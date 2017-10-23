@@ -1,7 +1,6 @@
 package nl.MensErgerJeNiet.mensergerjeniet.rest;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -113,43 +112,67 @@ public class MultiGameController {
 	private void sendGameData(String id, MensErgerJeNiet mejn) {
 		ChatMessage m = new ChatMessage();
 		m.setSender(SecurityContextHolder.getContext().getAuthentication().getName());
-		m.setContent(getJSONGameDataBuilder(mejn.getDice(), mejn.getPlayerIndex(), mejn.getPlayOptions(), "join", mejn));
+		m.setContent(getJSONGameDataBuilder("join", mejn));
 		m.setType(MessageType.GAME_OPTIONS);
 		messageSender.convertAndSend("/channel/public/"+ id, m);
 	}
 
 	public void gameReplys(ChatMessage message, String id) {
 		MensErgerJeNiet mejn = mejnlist.get(id);
-		if (!message.getType().equals(ChatMessage.MessageType.GAME))
-			return;
-		if(mejn.isFinished()) {
-			saveGameData(mejn);
-			mejnlist.remove(id);
+		if(mejn == null) {
+			mejn = new MensErgerJeNiet();
+			mejnlist.put(id, mejn);
+		}
+		if (!message.getType().equals(ChatMessage.MessageType.GAME)) {
 			return;
 		}
 		System.out.println("game stuff");
 		message.setSender(SecurityContextHolder.getContext().getAuthentication().getName());
-		if (message.getContent().equals("start")) { // iedereen kan het spel starten
-			if(mejn.getPlayerNames().contains(SecurityContextHolder.getContext().getAuthentication().getName())) {
-				mejn.startGame();
-				sendDataMessage(message, "start", mejn);
-			}
+		if (message.getContent().equals("start")) { // alleen spelers mogen het spel starten
+			startGame(message, mejn);
 		}else if (SecurityContextHolder.getContext().getAuthentication().getName().equals(mejn.getCurrentPlayer().getName())) { // alleen de speler die aan de beurt is mag acties uitvoeren
-			String lastAction = "";
-			if (message.getContent().equals("throw")) {
-				mejn.throwDice();
-				lastAction = "throw";
-				System.out.println("throw action");
-			} else if (message.getContent().startsWith("pion")) {
-				mejn.doOption(Integer.parseInt(message.getContent().split("pion")[1].trim()));
-				lastAction = "move";
-				System.out.println("move action");
-				if(mejn.isFinished()) {
-					saveGameData(mejn);
-					mejnlist.remove(id);
-				}
-			}
-			sendDataMessage(message, lastAction, mejn);
+			playerAction(message, id, mejn);
+		}
+	}
+
+	private void playerAction(ChatMessage message, String id, MensErgerJeNiet mejn) {
+		String lastAction = "";
+		if (message.getContent().equals("throw")) {
+			lastAction = throwDice(mejn);
+		} else if (message.getContent().startsWith("pion")) {
+			lastAction = movePawn(message, id, mejn);
+			gameFinishedCheck(id, mejn);
+		}
+		buildDataMessage(message, lastAction, mejn);
+	}
+
+	private void gameFinishedCheck(String id, MensErgerJeNiet mejn) {
+		if(mejn.isFinished()) {
+			saveGameData(mejn);
+			mejnlist.remove(id);
+		}
+	}
+
+	private String movePawn(ChatMessage message, String id, MensErgerJeNiet mejn) {
+		String lastAction;
+		mejn.doOption(Integer.parseInt(message.getContent().split("pion")[1].trim()));
+		lastAction = "move";
+		System.out.println("move action");
+		return lastAction;
+	}
+
+	private String throwDice(MensErgerJeNiet mejn) {
+		String lastAction;
+		mejn.throwDice();
+		lastAction = "throw";
+		System.out.println("throw action");
+		return lastAction;
+	}
+
+	private void startGame(ChatMessage message, MensErgerJeNiet mejn) {
+		if(mejn.getPlayerNames().contains(SecurityContextHolder.getContext().getAuthentication().getName())) {
+			mejn.startGame();
+			buildDataMessage(message, "start", mejn);
 		}
 	}
 
@@ -179,36 +202,38 @@ public class MultiGameController {
 		statService.save(statistics);
 	}
 	
-	private void sendDataMessage(ChatMessage message, String lastAction, MensErgerJeNiet mejn) {
-		int dice = mejn.getDice();
-		int playerIndex = mejn.getPlayerIndex();
-		int[] options = mejn.getPlayOptions();
+	private void buildDataMessage(ChatMessage message, String lastAction, MensErgerJeNiet mejn) {
 		message.setType(MessageType.GAME_OPTIONS);
-		message.setContent(getJSONGameDataBuilder(dice, playerIndex, options, lastAction, mejn));
+		message.setContent(getJSONGameDataBuilder(lastAction, mejn));
 	}
 
-	private String getJSONGameDataBuilder(int dice, int playerIndex, int[] options, String lastAction, MensErgerJeNiet mejn) {
+	private String getJSONGameDataBuilder(String lastAction, MensErgerJeNiet mejn) {
 		StringBuilder builder = new StringBuilder();
-		builder.append("{ \"dice\":").append(dice).
-		append(", \"pid\": ").append(playerIndex).
+		builder.append("{ \"dice\":").append(mejn.getDice()).
+		append(", \"pid\": ").append(mejn.getPlayerIndex()).
 		append(", \"action\": \"").append(lastAction).
-		append("\", \"pawns\": ").append(pawnPosJSONBuilder(mejn)).
-		append(", \"players\": ").append(playerNameListBuilder(mejn)).
-		append(" , \"options\": [");
+		append("\", \"pawns\": ").append(pawnPosJSONBuilder(mejn.getPawns())).
+		append(", \"players\": ").append(playerNameListBuilder(mejn.getPlayerNames())).
+		append(" , \"options\": ");
+		appendOptions(mejn.getPlayOptions(), builder);
+		builder.append("}");
+		return builder.toString();
+	}
+
+	private void appendOptions(int[] options, StringBuilder builder) {
+		builder.append("[");
 		for(int i = 0; i < options.length; ++i) {
 			builder.append(options[i]);
 			if(i < options.length-1) {
 				builder.append(",");
 			}
 		}
-		builder.append("]}");
-		return builder.toString();
+		builder.append("]");
 	}
 	
-	private String pawnPosJSONBuilder(MensErgerJeNiet mejn) {
+	private String pawnPosJSONBuilder(ArrayList<Pawn> pawns) {
 		StringBuilder builder = new StringBuilder();
 		builder.append("[ ");
-		ArrayList<Pawn> pawns = mejn.getPawns();
 		for(int i = 0; i < pawns.size(); ++i) {
 			builder.append("{");
 			builder.append(" \"id\":").append(i).
@@ -222,18 +247,16 @@ public class MultiGameController {
 		return builder.toString();
 	}
 
-	private String playerNameListBuilder(MensErgerJeNiet mejn) {
+	private String playerNameListBuilder(ArrayList<String> playerNames) {
 		StringBuilder builder = new StringBuilder();
 		builder.append("[");
-		ArrayList<String> list = mejn.getPlayerNames();
-		for(int i =0; i < list.size(); ++i) {
-			builder.append("\"").append(list.get(i)).append("\"");
-			if(i < list.size()-1) {
+		for(int i =0; i < playerNames.size(); ++i) {
+			builder.append("\"").append(playerNames.get(i)).append("\"");
+			if(i < playerNames.size()-1) {
 				builder.append(", ");
 			}
 		}
 		builder.append("]");
-		
 		return builder.toString();
 	}
 

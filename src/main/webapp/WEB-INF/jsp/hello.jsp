@@ -6,8 +6,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link href="<c:url value="/css/app.css" />" rel="stylesheet" type="text/css">
-<link rel="stylesheet" href="/css/bootstrap.min.css">
+	<%@ include file="../html-part/jsCssIncludes.jsp" %>
+	<link href="<c:url value="/css/app.css" />" rel="stylesheet" type="text/css">
  <title>Hello World!</title>
 </head>
 <body class="security-app">
@@ -29,7 +29,5 @@
 				type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 		</form>
 	</div>
-
-	<%@ include file="../html-part/bootstrap.html" %>
 </body>
 </html>
