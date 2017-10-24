@@ -13,6 +13,12 @@
       <h2>Login</h2>
 	<form action="./login" method="post">
 		<div class="lc-block">
+			<c:if test="${param.activated ne null}">
+				<div class="alert-normal">Your account has been activated.</div>
+			</c:if>
+			<c:if test="${param.activationfail ne null}">
+				<div class="alert-danger">activation failed.</div>
+			</c:if>
 			<div>
 				<input type="text" class="style-4" name="username"
 					placeholder="User Name" />
