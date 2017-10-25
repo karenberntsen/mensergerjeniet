@@ -35,10 +35,16 @@ app.controller('adminCtrl', function($scope) {
 		$scope.loadData();
 	}
 	
-	$scope.deleteUser = function(id) {
+	$scope.softDeleteUser = function(id) {
 		alert("delete user: " + id);
-		deleteRequest(null, "/admin/users/"+id, $scope.deleteUserCallback)
+		deleteRequest(null, "/admin/users/soft/"+id, $scope.deleteUserCallback)
 	}
+	
+	$scope.hardDeleteUser = function(id) {
+		alert("delete user: " + id);
+		deleteRequest(null, "/admin/users/hard/"+id, $scope.deleteUserCallback)
+	}
+	
 	$scope.deleteUserCallback = function(response) {
 		$scope.loadData();
 	}

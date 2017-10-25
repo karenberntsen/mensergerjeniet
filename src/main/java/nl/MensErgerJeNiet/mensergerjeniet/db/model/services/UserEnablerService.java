@@ -36,4 +36,11 @@ public class UserEnablerService {
 		}
 		return false;
 	}
+
+	public void enableByUserId(Long id) {
+		User user = userRepository.findOne(id);
+		user.setEnabled(Enabled.ENABLED);
+		userEnablerRepository.deleteByUser(user);
+		userRepository.save(user);
+	}
 }

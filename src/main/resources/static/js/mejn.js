@@ -41,10 +41,10 @@ var app = angular.module('myApp', [])
   $scope.start = [{"x": 6, "y": 0, "c": "blue"}, {"x": 10, "y": 6, "c": "green"}, {"x": 4, "y": 10, "c": "yellow"}, {"x": 0, "y": 4, "c": "red"}];
   $scope.allCircles = [].concat($scope.whiteCircles).concat($scope.home).concat($scope.finish).concat($scope.start);
   $scope.playerNames = [
-	  {"name": "", "x": 9, "y": 0}, 
-	  {"name": "", "x": 9, "y": 9}, 
-	  {"name": "", "x": 0, "y": 9}, 
-	  {"name": "", "x": 0, "y": 0}];
+	  {"name": "", "x": 79, "y": 20}, 
+	  {"name": "", "x": 79, "y": 75}, 
+	  {"name": "", "x": 15, "y": 20}, 
+	  {"name": "", "x": 15, "y": 75}];
   $scope.colours = ["#668cff","#85e085","#ffffb3","#ff9999"];
   $scope.optcolours = ["cyan"   ,"lime"   ,"khaki"  ,"orange" ];
   $scope.boardBorder = 7;

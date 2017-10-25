@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import nl.MensErgerJeNiet.mensergerjeniet.db.model.services.StatisticsInterface;
 import nl.MensErgerJeNiet.mensergerjeniet.db.model.services.StatisticsService;
+import nl.MensErgerJeNiet.mensergerjeniet.db.model.services.exportobjects.StatisticsInterface;
 
 @RestController
 public class HighScoreRest {

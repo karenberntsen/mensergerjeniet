@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import nl.MensErgerJeNiet.mensergerjeniet.db.model.Statistics;
 import nl.MensErgerJeNiet.mensergerjeniet.db.model.repositories.StatisticsRepository;
 import nl.MensErgerJeNiet.mensergerjeniet.db.model.repositories.UserRepository;
+import nl.MensErgerJeNiet.mensergerjeniet.db.model.services.exportobjects.StatisticsInterface;
 
 @Service
 public class StatisticsService {

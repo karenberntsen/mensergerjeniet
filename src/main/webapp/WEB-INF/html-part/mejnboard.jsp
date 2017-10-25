@@ -1,14 +1,20 @@
 <svg
-	style="width: 100vmin; height: 100vmin; top: 300; left: 0; bottom: 0; right: 0;
-	-moz-user-select: none; -webkit-user-select: none; -ms-user-select:none; user-select:none;-o-user-select:none;"
+	style="width: 100vmin; height: 100vmin; top: 300; left: 0; bottom: 0; right: 0; margin-left:auto; margin-right:auto; display:block;
+	-moz-user-select: none; -webkit-user-select: none; -ms-user-select:none; user-select:none;-o-user-select:none;
+	stroke-width: 0px; "
 	xmlns="http://www.w3.org/2000/svg"
 	unselectable="on"
 	onselectstart="return false;" 
 	onmousedown="return false;">
+	
+	<rect ng-attr-x="2.5%"
+			ng-attr-y="2.5%"
+			height="90%" width="90%"
+			fill="#f2ec80" stroke-width="0.5%" stroke="#ff0000"/> 
 	<!-- Zet de namen op het scherm -->
 	<text ng-repeat="player in playerNames"
-		ng-attr-x="{{circleCoordinates[player.x]}}%"
-		ng-attr-y="{{circleCoordinates[player.y]-5}}%" text-anchor="middle"
+		ng-attr-x="{{player.x}}%"
+		ng-attr-y="{{player.y}}%" text-anchor="middle"
 		stroke="black" stroke-width="2px">{{player.name}}</text>
 		
 	<!-- Zet de cirkels op het scherm -->
@@ -29,10 +35,10 @@
 			ng-attr-r="{{pawnRadius}}%" stroke="black" stroke-width="1"
 			fill="{{pawn.colour}}">
 		</circle>
-		<text ng-attr-x="{{circleCoordinates[pawn.x] + 0.1}}%"
+	<!-- 	<text ng-attr-x="{{circleCoordinates[pawn.x] + 0.1}}%"
 			ng-attr-y="{{circleCoordinates[pawn.y] + 0.8}}%" text-anchor="middle"
 			stroke="black" stroke-width="2px">{{pawn.id}}
-		</text>
+		</text> -->
 	</g>
 	
 	<!-- Zet de dobbelsteen op het scherm -->
@@ -49,16 +55,36 @@
 	</g>
 	
 	<!-- Zet de startknop op het scherm -->
-	<text 	ng-attr-x="25%"
-			ng-attr-y="2%" text-anchor="middle"
-			stroke="black" stroke-width="2px" ng-click="throwDiceHax()">HAX</text>
-	<text 	ng-attr-x="39%"
-			ng-attr-y="2%" text-anchor="middle"
-			stroke="black" stroke-width="2px" ng-click="joinGame()">JOIN</text>
-	<text 	ng-attr-x="55%"
-			ng-attr-y="2%" text-anchor="middle"
-			stroke="black" stroke-width="2px" ng-click="startGame()">START</text>
-	<text 	ng-attr-x="69%"
-			ng-attr-y="2%" text-anchor="middle"
-			stroke="black" stroke-width="2px" ng-click="startGame()">DELETE</text>
+	<g>
+		<rect 	ng-attr-x="23%"
+				ng-attr-y="0.25%" 
+				fill="white" width="4.2%" height="2.2%"/> 
+		<text 	ng-attr-x="25%"
+				ng-attr-y="2%" text-anchor="middle"
+				stroke="black" stroke-width="2px" ng-click="throwDiceHax()">HAX</text>
+	</g>
+	<g>
+		<rect 	ng-attr-x="36.5%"
+				ng-attr-y="0.25%" 
+				fill="white" width="5.2%" height="2.2%"/> 
+		<text 	ng-attr-x="39%"
+				ng-attr-y="2%" text-anchor="middle"
+				stroke="black" stroke-width="2px" ng-click="joinGame()">JOIN</text>
+	</g>
+	<g>
+		<rect 	ng-attr-x="52%"
+				ng-attr-y="0.25%" 
+				fill="white" width="6.2%" height="2.2%"/> 
+		<text 	ng-attr-x="55%"
+				ng-attr-y="2%" text-anchor="middle"
+				stroke="black" stroke-width="2px" ng-click="startGame()">START</text>
+	</g>
+	<g>
+		<rect 	ng-attr-x="65.5%"
+				ng-attr-y="0.25%" 
+				fill="white" width="7.2%" height="2.2%"/> 
+		<text 	ng-attr-x="69%"
+				ng-attr-y="2%" text-anchor="middle"
+				stroke="black" stroke-width="2px" ng-click="startGame()">DELETE</text>
+	</g>
 </svg>
