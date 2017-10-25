@@ -1,7 +1,6 @@
 package nl.MensErgerJeNiet.mensergerjeniet.game.model;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import lombok.Data;
 
@@ -58,8 +57,12 @@ public class MensErgerJeNiet {
 		if(playerIndex == 0) ++rounds;
 	}
 
-	public Player getCurrentPlayer() {
+	private Player getCurrentPlayer() {
 		return players.get(playerIndex);
+	}
+	
+	public String getCurrentPlayerName() {
+		return players.get(playerIndex).getName();
 	}
 
 	public int throwDice() {

@@ -16,8 +16,6 @@ import it.ozimov.springboot.mail.service.EmailService;
 
 @Service
 public class EmailServiceImpl {
-	@Value("${server.path}")
-	private String serverPath;
 	
 	@Autowired
 	public EmailService emailService;
@@ -28,14 +26,14 @@ public class EmailServiceImpl {
 		return list;
 	}
 
-	public void sendSimpleMessage(String emailaddress, String username, String secret) throws UnsupportedEncodingException {
-    	System.out.println(serverPath);
+	public void sendSimpleMessage(String emailaddress, String username, String secret, String url) throws UnsupportedEncodingException {
+    	System.out.println(url);
 		final Email email = DefaultEmail.builder()
                 .from(new InternetAddress("mejnonline@gmail.com",  "Auto mejn activationcode sender"))
                 .to(newArrayList(
                         new InternetAddress(emailaddress, username)))
                 .subject("Activation url mejn-account")
-                .body(serverPath+"/user/"+username+"/"+secret)
+                .body(url+ "/user/"+username+"/"+secret)
                 .encoding("UTF-8").build();
    	 emailService.send(email);
 	}

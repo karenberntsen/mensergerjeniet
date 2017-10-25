@@ -43,8 +43,8 @@ var app = angular.module('myApp', [])
   $scope.playerNames = [
 	  {"name": "", "x": 79, "y": 20}, 
 	  {"name": "", "x": 79, "y": 75}, 
-	  {"name": "", "x": 15, "y": 20}, 
-	  {"name": "", "x": 15, "y": 75}];
+	  {"name": "", "x": 15, "y": 75}, 
+	  {"name": "", "x": 15, "y": 20}];
   $scope.colours = ["#668cff","#85e085","#ffffb3","#ff9999"];
   $scope.optcolours = ["cyan"   ,"lime"   ,"khaki"  ,"orange" ];
   $scope.boardBorder = 7;

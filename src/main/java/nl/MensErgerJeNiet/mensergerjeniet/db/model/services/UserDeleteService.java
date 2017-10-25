@@ -33,13 +33,9 @@ public class UserDeleteService {
 		User user = userRepository.findOne(userId);
 		System.out.println(user.getUserName());
 		enablerRepository.deleteByUser(user);
-		System.out.println("enabler");
 		statRepository.deleteByUser(user);
-		System.out.println("stats");
 		gameRepository.deleteByWinner(user);
-		System.out.println("games");
 		roleRepository.deleteByUser(user);
-		System.out.println("roles");
 		userRepository.delete(user);
 	}
 

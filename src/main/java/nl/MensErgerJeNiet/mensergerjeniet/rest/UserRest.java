@@ -26,7 +26,7 @@ import nl.MensErgerJeNiet.mensergerjeniet.db.model.services.UserService;
 import nl.MensErgerJeNiet.mensergerjeniet.mail.EmailServiceImpl;
 
 @RestController
-public class UserController {
+public class UserRest {
 	@Autowired
 	UserService userService;
 	
@@ -56,15 +56,18 @@ public class UserController {
 		} else {
 			redirectUrl+= "activationfail";
 		}
-		System.out.println(redirectUrl);
 		response.sendRedirect(redirectUrl);
 	}
 	
 	@PostMapping("/registeruser")
-	public String register(@RequestBody User user) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+	public String register(@RequestBody User user, HttpServletRequest request) throws NoSuchAlgorithmException, UnsupportedEncodingException {
 		System.out.println(user);
+		String url = request.getScheme();
+		url += "://" + request.getServerName();
+		url += ":"+ request.getServerPort();
+		url += request.getContextPath();
 		user.setEmail(user.getEmail().toLowerCase());
-		String returnMessage = addUser(user);
+		String returnMessage = addUser(user, url);
 		if(returnMessage != null) {
 			return returnMessage;
 		} else {
@@ -73,7 +76,7 @@ public class UserController {
 		return "ok";
 	}
 
-	private String addUser(User user) throws UnsupportedEncodingException {
+	private String addUser(User user, String url) throws UnsupportedEncodingException {
 		if (!user.getEmail().matches(
 				"(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])")) {
 			return "Email bevat vage tekens!(geen email)";
@@ -94,7 +97,7 @@ public class UserController {
 		int secret  = random.ints(1).findFirst().getAsInt();
 		userEnabler.setSecret(""+secret);
 		userEnablerService.save(userEnabler);
-		emailService.sendSimpleMessage(user.getEmail(), user.getUserName(), userEnabler.getSecret());
+		emailService.sendSimpleMessage(user.getEmail(), user.getUserName(), userEnabler.getSecret(), url);
 		return null;
 	}
 

@@ -178,7 +178,6 @@ public abstract class Player {
 		} else if (dice==6 && home.size()>0) { //wordt er zes gegooid en zijn er nog pionnen in het huis?
 			playOptions.add(home.get(0));
 		} else {
-			Pawn otherPawn;
 			for (Pawn pawn:pawns) {
 				if (pawn==null) {
 					System.out.println("pion is null");

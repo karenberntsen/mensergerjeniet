@@ -130,7 +130,7 @@ public class MultiGameController {
 		message.setSender(SecurityContextHolder.getContext().getAuthentication().getName());
 		if (message.getContent().equals("start")) { // alleen spelers mogen het spel starten
 			startGame(message, mejn);
-		}else if (SecurityContextHolder.getContext().getAuthentication().getName().equals(mejn.getCurrentPlayer().getName())) { // alleen de speler die aan de beurt is mag acties uitvoeren
+		}else if (SecurityContextHolder.getContext().getAuthentication().getName().equals(mejn.getCurrentPlayerName())) { // alleen de speler die aan de beurt is mag acties uitvoeren
 			playerAction(message, id, mejn);
 		}
 	}
@@ -179,7 +179,7 @@ public class MultiGameController {
 	private void saveGameData(MensErgerJeNiet mejn) {
 		Game game = new Game();
 		game.setTurns(mejn.getRounds());
-		game.setWinner(userService.findByUserName(mejn.getCurrentPlayer().getName()));
+		game.setWinner(userService.findByUserName(mejn.getCurrentPlayerName()));
 		gameService.save(game);
 		List<String> usernames = mejn.getPlayerNames();
 		for(String name : usernames) {
