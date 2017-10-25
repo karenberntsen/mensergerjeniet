@@ -14,9 +14,11 @@
 	  	<%@ include file="../html-part/navbar.jsp" %>
 		<div ng-controller="indexCtrl">
 			<form>
-				<label>New channel</label>
-				<input id="boardId" type="text" />
-				<input type="button" value="Start board" ng-click="newBoard()"/>
+				<div class="form-group row">
+					<h3 for="boardId" class="col-sm-2 col-form-label">New Game</h3>
+					<input id="boardId" type="text"  placeholder="Board Name" class=" col-sm-4"/>
+					<input type="button" value="Start board"  ng-click="newBoard()"/>
+				</div>
 			</form>
 			<h1>Current Games</h1>
 			<div class="card-deck">

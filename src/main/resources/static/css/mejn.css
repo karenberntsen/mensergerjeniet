@@ -1,0 +1,7 @@
+body {
+    background: url("http://www.texturex.com/albums/Wood-Textures/Wood%20Texture%20Honey%20Maple%20light%20grain%20wooden%20panel%20flooring%20photo.jpg") no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}

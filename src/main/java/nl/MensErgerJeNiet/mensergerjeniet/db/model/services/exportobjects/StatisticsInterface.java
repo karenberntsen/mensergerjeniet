@@ -1,4 +1,4 @@
-package nl.MensErgerJeNiet.mensergerjeniet.db.model.services;
+package nl.MensErgerJeNiet.mensergerjeniet.db.model.services.exportobjects;
 
 import lombok.Data;
 

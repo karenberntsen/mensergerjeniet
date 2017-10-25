@@ -14,6 +14,8 @@
 		<script>
 		var _csrf ={"name": "${_csrf.parameterName}", "token": "${_csrf.token}"};
 		</script>
+		
+		<link rel="stylesheet"	href="<spring:url value="/css/mejn.css"/>">
  	</head>
 	<body>
 		<%@ include file="../html-part/navbar.jsp"%>

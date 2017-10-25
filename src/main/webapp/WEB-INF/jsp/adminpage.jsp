@@ -30,7 +30,7 @@
 						<td>{{ user.userName}}</td>
 						<td>{{ user.enabled }}</td>
 						<td ng-show= "{{ user.enabled != 'DELETED'  }} " >
-							<input type="button" value="X" ng-click="deleteUser(user.id)"/>
+							<input type="button" value="X" ng-click="softDeleteUser(user.id)"/>
 						</td>
 					</tr>
 				</table>
@@ -50,7 +50,7 @@
 						<td>{{ user.userName}}</td>
 						<td>{{ user.enabled }}</td>
 						<td ng-show= "{{ user.enabled != 'DELETED'  }} " >
-							<input type="button" value="X" ng-click="deleteUser(user.id)"/>
+							<input type="button" value="X" ng-click="softDeleteUser(user.id)"/>
 						</td>
 						<td ng-show= "{{ user.enabled  == 'DISABLED' }} ">
 							<input type="button" value="E" ng-click="enableUser(user.id)"/>
@@ -63,11 +63,15 @@
 						<tr>
 							<th>ID</th>
 							<th>Name</th>
+							<th>Hard Delete</th>
 						</tr>
-						</thead>
+					</thead>
 					<tr ng-repeat="user in deletedUsers">
 						<td>{{ user.id }}</td>
 						<td>{{ user.userName}}</td>
+						<td>
+							<input type="button" value="X" ng-click="hardDeleteUser(user.id)"/>
+						</td>
 					</tr>
 				</table>
 			</div>

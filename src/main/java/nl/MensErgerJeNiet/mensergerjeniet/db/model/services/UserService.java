@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import nl.MensErgerJeNiet.mensergerjeniet.db.model.Enabled;
 import nl.MensErgerJeNiet.mensergerjeniet.db.model.User;
 import nl.MensErgerJeNiet.mensergerjeniet.db.model.repositories.UserRepository;
+import nl.MensErgerJeNiet.mensergerjeniet.db.model.services.exportobjects.UserInterface;
 
 @Service
 public class UserService {
@@ -28,12 +29,6 @@ public class UserService {
 	}
 	public List<UserInterface> findAll2() {
 		return  userRepository.findAll2();
-	}
-
-	public void deleteUserWithId(Long id) {
-		User user = userRepository.findOne(id);
-		user.setEnabled(Enabled.DELETED);
-		userRepository.save(user);
 	}
 
 	public List<UserInterface> findEnabledUsers() {
