@@ -51,12 +51,10 @@ public class UserRest {
 	@GetMapping("/user/{username}/{secret}")
 	public void activateAccount(@PathVariable String username, @PathVariable String secret, HttpServletRequest request, HttpServletResponse response) throws IOException {
 		String redirectUrl = request.getContextPath()+"/login?";
-		if(userEnablerService.enable(username, secret)){
-			redirectUrl += "activated";
-		} else {
-			redirectUrl+= "activationfail";
+		String info = "activated";
+		if(!userEnablerService.enable(username, secret)){
 		}
-		response.sendRedirect(redirectUrl);
+		response.sendRedirect(redirectUrl+info);
 	}
 	
 	@PostMapping("/registeruser")
@@ -79,7 +77,10 @@ public class UserRest {
 	private String addUser(User user, String url) throws UnsupportedEncodingException {
 		if (!user.getEmail().matches(
 				"(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])")) {
-			return "Email bevat vage tekens!(geen email)";
+			return "Email bevat vage tekens!";
+		}
+		if(!user.getUserName().matches("[a-zA-Z0-9]{1,}")) {
+			return "Username bevat vage tekens";
 		}
 		if (user.getPassword().length() < 8) {
 			return "Wachtwoord moet minimaal 8 characters lang zijn";

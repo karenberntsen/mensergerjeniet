@@ -11,11 +11,13 @@ app.controller('indexCtrl', function($scope) {
 	
 	$scope.newBoard = function() {
 		var value = $("#boardId")[0].value;
-		if(value == "") {
-			alert("bord id mag niet leeg zijn");
-		} else {
-			location.pathname = location.pathname+"mejn/"+$("#boardId")[0].value;
+		var pat = /^([\w]{1,})$/;
+		if(pat.test(value) == false) {
+			$('.errormessage').text("voer een bordnaam met alleen letters & cijfers in.");
+			$('.errormessage').removeClass('invisible');
+			return;
 		}
+		location.pathname = location.pathname+"mejn/"+$("#boardId")[0].value;
 	}
 	$scope.getGamesList();
 });

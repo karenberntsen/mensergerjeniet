@@ -11,7 +11,7 @@
 <body>
 	<%@ include file="../html-part/navbar.jsp"%>
 	<h2>Create new user</h2>
-	<span class='errormessage'>${message}</span>
+	<span class='errormessage alert-danger'>${message}</span>
 	<form method="POST" action="<c:url value="/register"/>">
 		<div class="form-group row">
 			<label name="username" for="username"
