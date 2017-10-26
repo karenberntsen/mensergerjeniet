@@ -31,7 +31,6 @@ public class UserEnablerService {
 			user.setEnabled(Enabled.ENABLED);
 			userRepository.save(user);
 			userEnablerRepository.delete(userEnabler);
-			System.out.println("returning true");
 			return true;
 		}
 		return false;

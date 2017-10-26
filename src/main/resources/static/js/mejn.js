@@ -90,6 +90,12 @@ $scope.joinGame = function() {
 	postRequest(null, "/../game/"+channel+"/join");
 };
 
+
+$scope.stopGame = function() {
+	postRequest(null, "/../game/"+channel+"/stop");
+};
+
+
 $scope.throwEffect = function(dice, pid) {
 	for(var i = 0; i < 9; ++ i) {
 		setTimeout(function() {

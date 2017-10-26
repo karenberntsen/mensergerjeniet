@@ -101,6 +101,20 @@ public class MultiGameController {
 		return "ok";
 	}
 	
+	@PostMapping("/game/{id}/stop")
+	public String deleteGame(@PathVariable String id) {
+		MensErgerJeNiet mejn = mejnlist.get(id);
+		if(mejn == null) {
+			return "game doesn't exist";
+		}
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		if(mejn.getPlayerNames().contains(username)) {
+			mejnlist.remove(id);
+			return "ok";
+		}
+		return "you are not a player playing this game";
+	}
+	
 	@PostMapping("/game/{id}/hax/{nr}")
 	public void throwHax(@PathVariable String id, @PathVariable int nr) {
 		MensErgerJeNiet mejn = mejnlist.get(id);

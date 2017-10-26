@@ -5,10 +5,13 @@ import java.util.List;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import nl.MensErgerJeNiet.mensergerjeniet.db.model.Enabled;
 import nl.MensErgerJeNiet.mensergerjeniet.db.model.User;
 import nl.MensErgerJeNiet.mensergerjeniet.db.model.services.exportobjects.UserInterface;
+
+@Transactional
 @Repository
 public interface UserRepository extends CrudRepository<User, Long> {
     public User findByUserName(String username);

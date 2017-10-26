@@ -5,10 +5,13 @@ import java.util.List;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import nl.MensErgerJeNiet.mensergerjeniet.db.model.Statistics;
 import nl.MensErgerJeNiet.mensergerjeniet.db.model.User;
 import nl.MensErgerJeNiet.mensergerjeniet.db.model.services.exportobjects.StatisticsInterface;
+
+@Transactional
 @Repository
 public interface StatisticsRepository extends CrudRepository<Statistics, Long> {
     

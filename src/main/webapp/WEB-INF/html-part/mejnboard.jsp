@@ -85,6 +85,6 @@
 				fill="white" width="7.2%" height="2.2%"/> 
 		<text 	ng-attr-x="69%"
 				ng-attr-y="2%" text-anchor="middle"
-				stroke="black" stroke-width="2px" ng-click="startGame()">DELETE</text>
+				stroke="black" stroke-width="2px" ng-click="stopGame()">DELETE</text>
 	</g>
 </svg>

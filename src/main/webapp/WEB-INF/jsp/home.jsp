@@ -21,10 +21,9 @@
 				</div>
 			</form>
 			<h1>Current Games</h1>
-			<div class="card-deck">
-				<div class="card" style="width: 33%;" ng-repeat="gameInfo in list">
-					<div class="clearfix" ng-if="$index % 3 == 0"></div>
-				  <div class="card-block">
+			<div class="card-deck ">
+				<div class="card col-xl-3 rounded-circle mx-auto" ng-repeat="gameInfo in list">
+				  <div class="card-block ">
 				    <h4 class="card-title">{{gameInfo.id}}</h4>
 				    <p class="card-text">
 				    	<ul>
