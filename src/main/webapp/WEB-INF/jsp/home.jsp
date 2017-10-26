@@ -12,11 +12,11 @@
 	</head>
 	<body class="security-app">
 	  	<%@ include file="../html-part/navbar.jsp" %>
-		<div ng-controller="indexCtrl">
+		<div ng-controller="indexCtrl" class="text-center">
 			<form>
-				<div class="form-group row">
+				<div class="form-group row ">
 					<h3 for="boardId" class="col-sm-2 col-form-label">New Game</h3>
-					<input id="boardId" type="text"  placeholder="Board Name" class=" col-sm-4" pattern="\w"/>
+					<input id="boardId" type="text"  placeholder="Board Name" class=" col-sm-3" ng-model="filterBy"/>
 					<input type="button" value="Start board"  ng-click="newBoard()"/>
 				</div>
 			</form>
@@ -26,7 +26,7 @@
 					<div class="card card-inverse col-xl-3 rounded-circle mx-auto 
 								{{$index % 4 == 0 ? 'card-primary' : 
 								  $index % 4 == 1 ? 'card-success' : 
-								  $index % 4 == 2 ? 'card-warning'    : 'card-danger'}}"  ng-repeat="gameInfo in list">
+								  $index % 4 == 2 ? 'card-warning'    : 'card-danger'}}"  ng-repeat="gameInfo in list | filter:{id : filterBy}">
 					  <div class="card-block ">
 					    <h4 class="card-title">{{gameInfo.id}}</h4>
 					    	<ul>

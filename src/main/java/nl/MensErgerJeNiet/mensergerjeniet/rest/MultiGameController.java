@@ -224,6 +224,7 @@ public class MultiGameController {
 	private String getJSONGameDataBuilder(String lastAction, MensErgerJeNiet mejn) {
 		StringBuilder builder = new StringBuilder();
 		builder.append("{ \"dice\":").append(mejn.getDice()).
+		append(", \"started\": ").append(mejn.isGameStarted()).
 		append(", \"pid\": ").append(mejn.getPlayerIndex()).
 		append(", \"action\": \"").append(lastAction).
 		append("\", \"pawns\": ").append(pawnPosJSONBuilder(mejn.getPawns())).

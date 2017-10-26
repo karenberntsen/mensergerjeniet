@@ -66,18 +66,18 @@
 	<g>
 		<rect 	ng-attr-x="36.5%"
 				ng-attr-y="0.25%" 
-				fill="white" width="5.2%" height="2.2%"/> 
+				fill="white" width="5.2%" height="2.2%" ng-hide="started"/> 
 		<text 	ng-attr-x="39%"
 				ng-attr-y="2%" text-anchor="middle"
-				stroke="black" stroke-width="2px" ng-click="joinGame()">JOIN</text>
+				stroke="black" stroke-width="2px" ng-click="joinGame()" ng-hide="started">JOIN</text>
 	</g>
 	<g>
 		<rect 	ng-attr-x="52%"
 				ng-attr-y="0.25%" 
-				fill="white" width="6.2%" height="2.2%"/> 
+				fill="white" width="6.2%" height="2.2%" ng-hide="started"/> 
 		<text 	ng-attr-x="55%"
 				ng-attr-y="2%" text-anchor="middle"
-				stroke="black" stroke-width="2px" ng-click="startGame()">START</text>
+				stroke="black" stroke-width="2px" ng-click="startGame()" ng-hide="started">START</text>
 	</g>
 	<g>
 		<rect 	ng-attr-x="65.5%"

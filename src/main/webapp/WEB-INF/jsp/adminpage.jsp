@@ -14,8 +14,9 @@
 	<body>
 		<%@ include file="../html-part/adminNavbar.jsp"%>
 		<div>
-			<h1>Users</h1>
-			<div ng-controller="adminCtrl">
+			<div ng-controller="adminCtrl" class="text-center">
+				<h1>Users</h1>
+				<labe>filter user</labe><input type="text" ng-model="filterBy"/>
 				<table class="blueTable">
 					<thead>
 						<tr>
@@ -25,7 +26,7 @@
 							<th>Delete</th>
 						</tr>
 					</thead>
-					<tr ng-repeat="user in enabledUsers">
+					<tr ng-repeat="user in enabledUsers | filter:{userName:filterBy}">
 						<td>{{ user.id }}</td>
 						<td>{{ user.userName}}</td>
 						<td>{{ user.enabled }}</td>
@@ -45,7 +46,7 @@
 							<th>Enable</th>
 						</tr>
 					</thead>
-					<tr ng-repeat="user in disabledUsers">
+					<tr ng-repeat="user in disabledUsers | filter:{userName:filterBy}">
 						<td>{{ user.id }}</td>
 						<td>{{ user.userName}}</td>
 						<td>{{ user.enabled }}</td>
@@ -66,7 +67,7 @@
 							<th>Hard Delete</th>
 						</tr>
 					</thead>
-					<tr ng-repeat="user in deletedUsers">
+					<tr ng-repeat="user in deletedUsers | filter:{userName:filterBy}">
 						<td>{{ user.id }}</td>
 						<td>{{ user.userName}}</td>
 						<td>

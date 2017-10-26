@@ -56,7 +56,7 @@ var app = angular.module('myApp', [])
 
   $scope.options = [];
   $scope.pawns   = [];
-  
+  $scope.started = false;
   for(var i=1;i<11;i++) {
 		$scope.circleCoordinates[i]= $scope.circleCoordinates[i-1]+$scope.circleRadius*2+$scope.circleDistance;
   }
@@ -107,15 +107,18 @@ $scope.throwEffect = function(dice, pid) {
 	}, 500);
 };
 
+$scope.hideParts = function(gameStarted) {
+	
+};
 $scope.flashOptions = function(options) {
-    $scope.options = options
+    $scope.options = options;
 	for(var i =0; i < $scope.pawns.length; ++i) {
 		$scope.pawns[i].colour = $scope.colours[~~(i/4)];
 	}
 	for(var i =0; i <$scope.options.length; ++i) {
 		$scope.pawns[$scope.options[i]].colour = $scope.optcolours[~~($scope.options[i]/4)];
 	}
-}
+};
 
 $scope.throwDice = function() {
     if(stompClient) {
@@ -164,7 +167,8 @@ $scope.throwDiceHax = function() {
  
  $scope.updateGameBoard = function(content) {
 	 var total = JSON.parse(content);
-     
+	 $scope.started = total.started;
+     $scope.hideParts(total.started);
      $scope.flashOptions(total.options);
      $scope.drawPawns(total.pawns);
      $scope.drawPlayerNames(total.players);

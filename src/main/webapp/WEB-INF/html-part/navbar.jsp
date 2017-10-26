@@ -13,14 +13,14 @@
 			<a class="nav-link" href="<c:url value="/highscores" />">Highscores</a>
 			</li>
 			<li class="nav-item"><a class="nav-link"
-				href="<c:url value="./admin"/>">Admin</a>
+				href="<c:url value="/admin"/>">Admin</a>
 			</li>
 		</ul>
 		<ul class="nav navbar-nav navbar-right">
 		<c:choose>
 			<c:when test="${empty sessionScope.name}">
 				<li class="nav-item right"><a class="nav-link"
-					href="<c:url value="./login"/>">Login</a>
+					href="<c:url value="/login"/>">Login</a>
 				</li>
 			</c:when>
 			<c:otherwise>
