@@ -59,6 +59,7 @@ public class UserRest {
 	
 	@PostMapping("/registeruser")
 	public String register(@RequestBody User user, HttpServletRequest request) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+		user.setUserId(null);
 		System.out.println(user);
 		String url = request.getScheme();
 		url += "://" + request.getServerName();
